@@ -1857,7 +1857,7 @@ static bool8 Fishing_CheckForBite(struct Task *task)
 static bool8 Fishing_GotBite(struct Task *task)
 {
     AlignFishingAnimationFrames();
-    AddTextPrinterParameterized(0, 1, gText_OhABite, 0, 17, 0, NULL);
+    //AddTextPrinterParameterized(0, 1, gText_OhABite, 0, 17, 0, NULL);
     task->tStep++;
     task->tFrameCounter = 0;
     return FALSE;
@@ -1866,34 +1866,35 @@ static bool8 Fishing_GotBite(struct Task *task)
 // We have a bite. Now, wait for the player to press A, or the timer to expire.
 static bool8 Fishing_WaitForA(struct Task *task)
 {
-    const s16 reelTimeouts[3] = {
-        [OLD_ROD]   = 36, 
-        [GOOD_ROD]  = 33, 
+    /*const s16 reelTimeouts[3] = {
+        [OLD_ROD]   = 36,
+        [GOOD_ROD]  = 33,
         [SUPER_ROD] = 30
     };
-
+	*/
     AlignFishingAnimationFrames();
+    /*
     task->tFrameCounter++;
     if (task->tFrameCounter >= reelTimeouts[task->tFishingRod])
         task->tStep = FISHING_GOT_AWAY;
     else if (JOY_NEW(A_BUTTON))
-        task->tStep++;
+        */task->tStep++;
     return FALSE;
 }
 
 // Determine if we're going to play the dot game again
 static bool8 Fishing_CheckMoreDots(struct Task *task)
 {
-    const s16 moreDotsChance[][2] =
+    /*const s16 moreDotsChance[][2] =
     {
         [OLD_ROD]   = {0, 0},
         [GOOD_ROD]  = {40, 10},
         [SUPER_ROD] = {70, 30}
-    };
+    };*/
 
     AlignFishingAnimationFrames();
     task->tStep++;
-    if (task->tRoundsPlayed < task->tMinRoundsRequired)
+    /*if (task->tRoundsPlayed < task->tMinRoundsRequired)
     {
         task->tStep = FISHING_START_ROUND;
     }
@@ -1904,7 +1905,7 @@ static bool8 Fishing_CheckMoreDots(struct Task *task)
 
         if (moreDotsChance[task->tFishingRod][task->tRoundsPlayed] > probability)
             task->tStep = FISHING_START_ROUND;
-    }
+    }*/
     return FALSE;
 }
 
