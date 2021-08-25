@@ -268,7 +268,7 @@ static const u8 gPresetBingo[CURRENT_OPTIONS_NUM] = {
     0xFF,                   // (Reserved for trainer name)
     EXP_BW,                 // EXP
     PLOT_FULL,              // PLOTLESS
-    SPIN_KEEP,              // SPINNERS
+    SPIN_NERF,              // SPINNERS
     MAX_OFF,                // MAXVISION
     FLY_YES,                // EARLYFLY
     GOOD_OFF,               // GOOD_EARLY_WILDS
