@@ -1986,7 +1986,10 @@ static u8 CanMonLearnTMTutor(struct Pokemon *mon, u16 item, u8 tutor)
 
 static u16 GetTutorMove(u8 tutor)
 {
-    return gTutorMoves[tutor];
+    if(tutor == 69)
+        return MOVE_FALSE_SWIPE;
+	
+	return gTutorMoves[tutor];
 }
 
 static bool8 CanLearnTutorMove(u16 species, u8 tutor)
