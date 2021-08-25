@@ -10103,6 +10103,7 @@ static void Cmd_trysetcaughtmondexflags(void)
 static void Cmd_displaydexinfo(void)
 {
     u16 species = GetMonData(&gEnemyParty[0], MON_DATA_SPECIES, NULL);
+    s32 i;
 
     switch (gBattleCommunication[0])
     {
@@ -10126,7 +10127,24 @@ static void Cmd_displaydexinfo(void)
             && !gTasks[gBattleCommunication[TASK_ID]].isActive)
         {
             SetVBlankCallback(VBlankCB_Battle);
-            gBattleCommunication[0]++;
+
+            for (i = 0; i < PARTY_SIZE; i++)
+                {
+                    if (GetMonData(&gPlayerParty[i], MON_DATA_SPECIES, NULL) == SPECIES_NONE)
+                        break;
+                }
+
+            //If there are no messages to show after the pokedex, fade away immediately
+            //if party is not full, no box message
+            //if nickname setting is off, no nickname message
+			if (i >= PARTY_SIZE || !gSaveBlock2Ptr->optionsNickname){
+				//show messages
+				gBattleCommunication[0]++;
+			}
+			else{
+				//fade immediately
+				gBattleCommunication[0]=5;
+			}
         }
         break;
     case 3:
@@ -10224,11 +10242,32 @@ static void Cmd_trygivecaughtmonnick(void)
     switch (gBattleCommunication[MULTIUSE_STATE])
     {
     case 0:
-        HandleBattleWindow(0x18, 8, 0x1D, 0xD, 0);
-        BattlePutTextOnWindow(gText_BattleYesNoChoice, 0xC);
-        gBattleCommunication[MULTIUSE_STATE]++;
-        gBattleCommunication[CURSOR_POSITION] = 0;
-        BattleCreateYesNoCursorAt(0);
+    	//if nickname setting is off, skip straight to end of nickname fucntion
+    	if (!gSaveBlock2Ptr->optionsNickname){
+    		//nickname enabled
+    		gBattleCommunication[MULTIUSE_STATE] = 5;
+    	}
+    	else{
+    		//nickname disabled
+    		gBattleCommunication[MULTIUSE_STATE] = 4;
+    	}
+        break;
+    case 5:
+    	if (gBattleControllerExecFlags == 0)
+			{
+				PrepareStringBattle(STRINGID_GIVENICKNAMECAPTURED, gBattlerAttacker);
+				gBattleCommunication[MSG_DISPLAY] = 1;
+				gBattleCommunication[MULTIUSE_STATE]++;
+			}
+    	break;
+    case 6:
+    	if (gBattleControllerExecFlags == 0){
+    		HandleBattleWindow(0x18, 8, 0x1D, 0xD, 0);
+			BattlePutTextOnWindow(gText_BattleYesNoChoice, 0xC);
+			gBattleCommunication[CURSOR_POSITION] = 0;
+			BattleCreateYesNoCursorAt(0);
+			gBattleCommunication[MULTIUSE_STATE] = 1;
+    	}
         break;
     case 1:
         if (JOY_NEW(DPAD_UP) && gBattleCommunication[CURSOR_POSITION] != 0)

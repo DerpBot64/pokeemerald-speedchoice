@@ -4024,11 +4024,26 @@ static void Task_DisplayCaughtMonDexPage(u8 taskId)
 
 static void Task_HandleCaughtMonPageInput(u8 taskId)
 {
-    if (JOY_NEW(A_BUTTON | B_BUTTON))
+	 s32 i;
+	if (JOY_NEW(A_BUTTON | B_BUTTON))
     {
-        BeginNormalPaletteFade(0x0000FFFF, 0, 0, 16, RGB_BLACK);
-        gSprites[gTasks[taskId].tMonSpriteId].callback = SpriteCB_SlideCaughtMonToCenter;
-        gTasks[taskId].func = Task_ExitCaughtMonPage;
+        //if Nickname is off AND party is not full, don't slide to center
+    	for (i = 0; i < PARTY_SIZE; i++)
+			{
+				if (GetMonData(&gPlayerParty[i], MON_DATA_SPECIES, NULL) == SPECIES_NONE)
+					break;
+			}
+
+		if (i >= PARTY_SIZE || !gSaveBlock2Ptr->optionsNickname){
+			//need to show messages and slide
+			BeginNormalPaletteFade(0x0000FFFF, 0, 0, 16, RGB_BLACK);
+			gSprites[gTasks[taskId].tMonSpriteId].callback = SpriteCB_SlideCaughtMonToCenter;
+			gTasks[taskId].func = Task_ExitCaughtMonPage;
+		}
+		else{
+			//fade immediately
+			DestroyTask(taskId);
+		}
     }
     // Flicker caught screen color
     else if (++gTasks[taskId].tPalTimer & 16)
