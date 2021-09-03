@@ -161,7 +161,7 @@ AUTO_GEN_TARGETS :=
 
 $(shell mkdir -p $(SUBDIRS))
 
-all: rom
+all: rom tools ini
 
 tools: $(TOOLDIRS)
 

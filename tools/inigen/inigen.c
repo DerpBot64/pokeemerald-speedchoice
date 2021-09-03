@@ -140,9 +140,9 @@ const struct TMText gMoveTutorTexts[] = {
     {14, "gMoveTutorText_17", "When I see the wide world from up here on the roof…\\pI think about how nice it would be if there were more than just one me so I could enjoy all sorts of lives.\\pOf course it’s not possible. Giggle…\\pI know! Would you be interested in having a POKéMON learn [move]?"},
     {14, "gMoveTutorText_18", "Giggle… Which POKéMON do you want me to teach [move]?"},
     {14, "gMoveTutorText_19", "Oh, no?\\pA POKéMON can do well in a battle using it, you know."},
-    {25, "gMoveTutorText_20", "Heh! My POKéMON totally rules! It’s cooler than any POKéMON!\\pI was lipping off with a swagger in my step like that when the CHAIRMAN chewed me out.\\pThat took the swagger out of my step.\\pIf you’d like, I’ll teach the move [move] to a POKéMON of yours."},
-    {25, "gMoveTutorText_21", "All right, which POKéMON wants to learn how to [move]?"},
-    {25, "gMoveTutorText_22", "I’ll just praise my POKéMON from now on without the [move]."}
+    {23, "gMoveTutorText_20", "Heh! My POKéMON totally rules! It’s cooler than any POKéMON!\\pI was lipping off with a swagger in my step like that when the CHAIRMAN chewed me out.\\pThat took the swagger out of my step.\\pIf you’d like, I’ll teach the move [move] to a POKéMON of yours."},
+    {23, "gMoveTutorText_21", "All right, which POKéMON wants to learn how to [move]?"},
+    {23, "gMoveTutorText_22", "I’ll just praise my POKéMON from now on without the [move]."}
 };
 
 /*
@@ -565,7 +565,7 @@ int main(int argc, char ** argv)
     Elf32_Sym * Em_gAbilityNames = GetSymbolByName("gAbilityNames");
     print("AbilityNameLength=%d\n", Em_gAbilityNames->st_size / ABILITIES_COUNT);
     config_sym("TmMoves", "sTMHMMoves");
-    config_sym("TmMovesDuplicate", "sUnused_StatStrings");
+    fprintf(outFile, "%s=0x%X\n", (("TmMovesDuplicate")), (((GetSymbolByName(("sTMHMMoves"))->st_value)-0x4AC) & 0xFFFFFF));
     config_sym("MoveTutorData", "gTutorMoves");
     Elf32_Sym* Em_gTutorMoves = GetSymbolByName("gTutorMoves");
     print("MoveTutorMoves=%d\n", Em_gTutorMoves->st_size / 2);
