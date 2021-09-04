@@ -877,6 +877,7 @@ static void Task_StartUseRepel(u8 taskId)
         data[8] = 0;
         PlaySE(SE_REPEL);
         gTasks[taskId].func = Task_UseRepel;
+        gTasks[taskId].data[15] = 0;
     }
 }
 
@@ -885,12 +886,27 @@ static void Task_UseRepel(u8 taskId)
     if (!IsSEPlaying())
     {
         VarSet(VAR_REPEL_STEP_COUNT, ItemId_GetHoldEffectParam(gSpecialVar_ItemId));
+        VarSet(VAR_LAST_USED_REPEL, gSpecialVar_ItemId);
         RemoveUsedItem();
+        if (gTasks[taskId].data[15] == 1)
+		{
+			DestroyTask(taskId);
+			EnableBothScriptContexts();
+			return;
+		}
         if (!InBattlePyramid())
             DisplayItemMessage(taskId, 1, gStringVar4, BagMenu_InitListsMenu);
         else
             DisplayItemMessageInBattlePyramid(taskId, gStringVar4, Task_CloseBattlePyramidBagMessage);
     }
+}
+
+void Special_UseLastRepelInField(void)
+{
+    u8 taskId = CreateTask(Task_UseRepel, 0);
+    gTasks[taskId].data[15] = 1;
+    gSpecialVar_ItemId = VarGet(VAR_LAST_USED_REPEL);
+    PlaySE(SE_REPEL);
 }
 
 static void Task_UsedBlackWhiteFlute(u8 taskId)
