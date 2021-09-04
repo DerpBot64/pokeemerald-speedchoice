@@ -261,6 +261,13 @@ LavaridgeTown_EventScript_EggWoman:: @ 81EA744
 	playfanfare MUS_OBTAIN_ITEM
 	message LavaridgeTown_Text_ReceivedTheEgg
 	waitfanfare
+	checkspeedchoice FORCE_DITTO, FORCE_DITTO_YES
+	call_if_eq LavaridgeTown_EventScript_EggWomanForceDitto
+	giveegg SPECIES_WYNAUT
+	release
+	end
+
+LavaridgeTown_EventScript_EggWomanForceDitto:
 	giveegg SPECIES_DITTO
 	release
 	end

@@ -41,6 +41,7 @@
 	.set FAST_EGG_BREED, 14
 	.set MEME_FISH, 15
     .set EVO_EVERY_LEVEL, 16
+	.set FORCE_DITTO, 17
 
     @ -------------
     @ option enums
@@ -128,3 +129,7 @@
 	@ MEME_FISH
 	.set MEME_FISH_YES, 0
 	.set MEME_FISH_NO, 1
+
+	@ FORCE_DITTO
+	.set FORCE_DITTO_YES, 0
+	.set FORCE_DITTO_NO, 1

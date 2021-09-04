@@ -166,6 +166,7 @@ const u8 gSpeedchoiceOptionEarlyBike[] = _("{COLOR GREEN}{SHADOW LIGHT_GREEN}EAR
 const u8 gSpeedchoiceOptionFastEggHatch[] = _("{COLOR GREEN}{SHADOW LIGHT_GREEN}FAST EGG HATCH");
 const u8 gSpeedchoiceOptionFastEggBreed[] = _("{COLOR GREEN}{SHADOW LIGHT_GREEN}FAST EGG BREED");
 const u8 gSpeedchoiceOptionMemeFish[] = _("{COLOR GREEN}{SHADOW LIGHT_GREEN}MEME FISHING");
+const u8 gSpeedchoiceOptionForceDitto[] = _("{COLOR GREEN}{SHADOW LIGHT_GREEN}FORCE DITTO");
 
 // PAGE 5
 const u8 gSpeedchoiceOptionGen7XItems[] = _("{COLOR GREEN}{SHADOW LIGHT_GREEN}GEN 7 X ITEMS");
@@ -211,7 +212,8 @@ const u8 gSpeedchoiceTooltipFastEggBreeding[] = _("Eggs generate every cycle\nin
 const u8 gSpeedchoiceTooltipFastEggHatching[] = _("Eggs immediately hatch every cycle.");
 const u8 gSpeedchoiceTooltipGen7XItems[] = _("Stat boost +2 instead of +1.");
 const u8 gSpeedchoiceTooltipEvoEveryLv[] = _("{PKMN} evolve into a random\nbut set species every lv.");
-const u8 gSpeedchoiceTooltipMemeFishing[] = _("Old and Good Rod can catch high\nlevel Pokemon.");
+const u8 gSpeedchoiceTooltipMemeFishing[] = _("Old and Good Rod can catch high\nlevel {PKMN}.");
+const u8 gSpeedchoiceTooltipForceDitto[] = _("Wynaut Egg is forced to be a\nDitto egg.");
 
 // START GAME
 const u8 gSpeedchoiceStartGameText[] = _("CV: {STR_VAR_1}\nStart the game?");
@@ -267,7 +269,8 @@ static const u8 gPresetVanilla[CURRENT_OPTIONS_NUM] = {
 	FAST_EGG_HATCH_NO,      // FAST_EGG_HATCH
 	FAST_EGG_BREED_NO,      // FAST_EGG_BREEED
 	MEME_FISH_NO,           // MEME_FISH
-    EVO_EV_OFF              // EVO_EVERY_LEVEL
+    EVO_EV_OFF,             // EVO_EVERY_LEVEL
+	FORCE_DITTO_NO          // FORCE_DITTO
 };
 
 static const u8 gPresetBingo[CURRENT_OPTIONS_NUM] = {
@@ -287,7 +290,8 @@ static const u8 gPresetBingo[CURRENT_OPTIONS_NUM] = {
 	FAST_EGG_HATCH_YES,     // FAST_EGG_HATCH
 	FAST_EGG_BREED_YES,     // FAST_EGG_BREEED
 	MEME_FISH_YES,          // MEME_FISH
-    EVO_EV_OFF              // EVO_EVERY_LEVEL
+    EVO_EV_OFF,             // EVO_EVERY_LEVEL
+	FORCE_DITTO_YES         // FORCE_DITTO
 };
 
 static const u8 gPresetCEA[CURRENT_OPTIONS_NUM] = {
@@ -307,7 +311,8 @@ static const u8 gPresetCEA[CURRENT_OPTIONS_NUM] = {
 	FAST_EGG_HATCH_YES,     // FAST_EGG_HATCH
 	FAST_EGG_BREED_YES,     // FAST_EGG_BREEED
 	MEME_FISH_YES,          // MEME_FISH
-    EVO_EV_OFF              // EVO_EVERY_LEVEL
+    EVO_EV_OFF,             // EVO_EVERY_LEVEL
+	FORCE_DITTO_NO          // FORCE_DITTO
 };
 
 static const u8 gPresetRace[CURRENT_OPTIONS_NUM] = {
@@ -327,7 +332,8 @@ static const u8 gPresetRace[CURRENT_OPTIONS_NUM] = {
 	FAST_EGG_HATCH_NO,      // FAST_EGG_HATCH
 	FAST_EGG_BREED_NO,      // FAST_EGG_BREEED
 	MEME_FISH_NO,           // MEME_FISH
-    EVO_EV_OFF              // EVO_EVERY_LEVEL
+    EVO_EV_OFF,             // EVO_EVERY_LEVEL
+	FORCE_DITTO_NO          // FORCE_DITTO
 };
 
 static const u8 gPresetMeme[CURRENT_OPTIONS_NUM] = {
@@ -347,7 +353,8 @@ static const u8 gPresetMeme[CURRENT_OPTIONS_NUM] = {
 	FAST_EGG_HATCH_NO,      // FAST_EGG_HATCH
 	FAST_EGG_BREED_NO,      // FAST_EGG_BREEED
 	MEME_FISH_YES,          // MEME_FISH
-    EVO_EV_ON               // EVO_EVERY_LEVEL
+    EVO_EV_ON,              // EVO_EVERY_LEVEL
+	FORCE_DITTO_YES         // FORCE_DITTO
 };
 
 /*
@@ -670,7 +677,7 @@ const struct SpeedchoiceOption SpeedchoiceOptions[CURRENT_OPTIONS_NUM + 1] = // 
 		/* Option Tooltip */ gSpeedchoiceTooltipMemeFishing,
 		/* Option Usable  */ TRUE
 		},
-// ----------------------------------
+	// ----------------------------------
     // EVO EVERY LEVEL OPTION
     // ----------------------------------
     { 
@@ -681,6 +688,17 @@ const struct SpeedchoiceOption SpeedchoiceOptions[CURRENT_OPTIONS_NUM + 1] = // 
         /* Option Tooltip */ gSpeedchoiceTooltipEvoEveryLv,
         /* Option Usable  */ TRUE
     },
+	// ----------------------------------
+	// FORCE DITTO OPTION
+	// ----------------------------------
+	{
+		/* Option Count   */ 2,
+		/* Option Type    */ NORMAL,
+		/* Option Preset  */ gSpeedchoiceOptionForceDitto,
+		/* Option Text    */ OptionChoiceConfigOnOff,
+		/* Option Tooltip */ gSpeedchoiceTooltipForceDitto,
+		/* Option Usable  */ TRUE
+	},
     // ----------------------------------
     // PAGE STATIC OPTION
     // ----------------------------------
@@ -757,6 +775,7 @@ void SetOptionChoicesAndConfigFromPreset(const u8 *preset)
     gSaveBlock2Ptr->speedchoiceConfig.fastEggBreed = preset[FAST_EGG_BREED];
     gSaveBlock2Ptr->speedchoiceConfig.memeFish = preset[MEME_FISH];
     gSaveBlock2Ptr->speedchoiceConfig.evoEveryLevel = preset[EVO_EVERY_LEVEL];
+    gSaveBlock2Ptr->speedchoiceConfig.forceDitto = preset[FORCE_DITTO];
 }
 
 /*
@@ -799,6 +818,8 @@ bool8 CheckSpeedchoiceOption(u8 option, u8 selection)
 			return gSaveBlock2Ptr->speedchoiceConfig.memeFish == selection;
         case EVO_EVERY_LEVEL:
             return gSaveBlock2Ptr->speedchoiceConfig.evoEveryLevel == selection;
+        case FORCE_DITTO:
+            return gSaveBlock2Ptr->speedchoiceConfig.forceDitto == selection;
         default:
             return FALSE;
     }
@@ -1338,6 +1359,7 @@ static void SaveSpeedchoiceOptions(u8 taskId)
     gSaveBlock2Ptr->speedchoiceConfig.fastEggBreed = gLocalSpeedchoiceConfig.optionConfig[FAST_EGG_BREED];
     gSaveBlock2Ptr->speedchoiceConfig.memeFish = gLocalSpeedchoiceConfig.optionConfig[MEME_FISH];
     gSaveBlock2Ptr->speedchoiceConfig.evoEveryLevel = gLocalSpeedchoiceConfig.optionConfig[EVO_EVERY_LEVEL];
+    gSaveBlock2Ptr->speedchoiceConfig.forceDitto = gLocalSpeedchoiceConfig.optionConfig[FORCE_DITTO];
 
     // write the playername.
     for (i = 0; i < PLAYER_NAME_LENGTH; i++) {
