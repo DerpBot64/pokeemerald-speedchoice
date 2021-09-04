@@ -211,7 +211,7 @@ const u8 gSpeedchoiceTooltipFastEggBreeding[] = _("Eggs generate every cycle\nin
 const u8 gSpeedchoiceTooltipFastEggHatching[] = _("Eggs immediately hatch every cycle.");
 const u8 gSpeedchoiceTooltipGen7XItems[] = _("Stat boost +2 instead of +1.");
 const u8 gSpeedchoiceTooltipEvoEveryLv[] = _("{PKMN} evolve into a random\nbut set species every lv.");
-const u8 gSpeedchoiceTooltipMemeFishing[] = _("Old and Good Rod can catch high\nlevel pokemon.");
+const u8 gSpeedchoiceTooltipMemeFishing[] = _("Old and Good Rod can catch high\nlevel Pokemon.");
 
 // START GAME
 const u8 gSpeedchoiceStartGameText[] = _("CV: {STR_VAR_1}\nStart the game?");
@@ -919,7 +919,7 @@ static void DrawHeaderWindow(void);
 static void Task_SpeedchoiceMenuFadeIn(u8 taskId);
 static void sub_80BB154(void);
 
-extern const u8 *const gFemalePresetNames[];
+extern const u8 *const gPlayerPresetNames[];
 
 /*
  * Initialize the default player name similar to how Birch intro does it.
@@ -929,8 +929,7 @@ void FormatInitialTempName(u8 nameId)
     const u8* name;
     u8 i;
 
-    // who needs male anyway
-    name = gFemalePresetNames[nameId];
+    name = gPlayerPresetNames[nameId];
     for (i = 0; i < 7; i++)
         gTempPlayerName[i] = name[i];
     gTempPlayerName[7] = 0xFF;
@@ -1055,7 +1054,7 @@ void CB2_InitSpeedchoice(void)
     
             SetOptionChoicesAndConfigFromPreset(gPresetVanilla);
     
-            FormatInitialTempName(Random() % 20);
+            FormatInitialTempName(Random() % 42);
         }
         DrawHeaderWindow();
         DrawPageOptions(gLocalSpeedchoiceConfig.pageNum);

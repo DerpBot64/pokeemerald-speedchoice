@@ -461,31 +461,10 @@ static const struct MenuAction sMenuActions_Gender[] = {
     {gText_BirchBoy, NULL}
 };
 
-static const u8 *const gMalePresetNames[] = {
-    gText_DefaultNameStu,
-    gText_DefaultNameMilton,
-    gText_DefaultNameTom,
-    gText_DefaultNameKenny,
-    gText_DefaultNameReid,
-    gText_DefaultNameJude,
-    gText_DefaultNameJaxson,
-    gText_DefaultNameEaston,
-    gText_DefaultNameWalker,
-    gText_DefaultNameTeru,
-    gText_DefaultNameJohnny,
-    gText_DefaultNameBrett,
-    gText_DefaultNameSeth,
-    gText_DefaultNameTerry,
-    gText_DefaultNameCasey,
-    gText_DefaultNameDarren,
-    gText_DefaultNameLandon,
-    gText_DefaultNameCollin,
-    gText_DefaultNameStanley,
-    gText_DefaultNameQuincy
-};
-
-const u8 *const gFemalePresetNames[] = {
-    gText_DefaultNameKimmy,
+const u8 *const gPlayerPresetNames[] = {
+	gText_DefaultNameBrandon,
+	gText_DefaultNameMay,
+	gText_DefaultNameKimmy,
     gText_DefaultNameTiara,
     gText_DefaultNameBella,
     gText_DefaultNameJayla,
@@ -504,7 +483,27 @@ const u8 *const gFemalePresetNames[] = {
     gText_DefaultNameLillie,
     gText_DefaultNameTerra,
     gText_DefaultNameLucy,
-    gText_DefaultNameHalie
+    gText_DefaultNameHalie,
+	gText_DefaultNameStu,
+	gText_DefaultNameMilton,
+	gText_DefaultNameTom,
+	gText_DefaultNameKenny,
+	gText_DefaultNameReid,
+	gText_DefaultNameJude,
+	gText_DefaultNameJaxson,
+	gText_DefaultNameEaston,
+	gText_DefaultNameWalker,
+	gText_DefaultNameTeru,
+	gText_DefaultNameJohnny,
+	gText_DefaultNameBrett,
+	gText_DefaultNameSeth,
+	gText_DefaultNameTerry,
+	gText_DefaultNameCasey,
+	gText_DefaultNameDarren,
+	gText_DefaultNameLandon,
+	gText_DefaultNameCollin,
+	gText_DefaultNameStanley,
+	gText_DefaultNameQuincy
 };
 
 // .text
@@ -2121,10 +2120,7 @@ static void NewGameBirchSpeech_SetDefaultPlayerName(u8 nameId)
     const u8* name;
     u8 i;
 
-    if (gSaveBlock2Ptr->playerGender == MALE)
-        name = gMalePresetNames[nameId];
-    else
-        name = gFemalePresetNames[nameId];
+    name = gPlayerPresetNames[nameId];
     for (i = 0; i < 7; i++)
         gSaveBlock2Ptr->playerName[i] = name[i];
     gSaveBlock2Ptr->playerName[7] = 0xFF;
