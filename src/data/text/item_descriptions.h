@@ -1396,6 +1396,11 @@ static const u8 sHM05Desc[] = _(
     "blast of light that\n"
     "reduces accuracy.");
 
+static const u8 sHM05FalseSwipeDesc[] = _(
+	"An attack that\n"
+	"leaves the foe with\n"
+	"at least 1 HP.");
+
 static const u8 sHM06Desc[] = _(
     "A rock-crushingly\n"
     "tough attack that\n"

@@ -8,12 +8,21 @@ GraniteCave_1F_EventScript_Hiker:: @ 822DA5E
 	msgbox GraniteCave_1F_Text_GetsDarkAheadHereYouGo, MSGBOX_DEFAULT
 	giveitem ITEM_HM05
 	setflag FLAG_RECEIVED_HM05
+	checkspeedchoice EASY_FALSE_SWIPE, EASY_FALSE_SWIPE_HM05
+	goto_if_eq GraniteCave_1F_EventScript_ExplainFalseSwipe
 	msgbox GraniteCave_1F_Text_ExplainFlash, MSGBOX_DEFAULT
 	release
 	end
 
 GraniteCave_1F_EventScript_ReceivedFlash:: @ 822DA8A
+	checkspeedchoice EASY_FALSE_SWIPE, EASY_FALSE_SWIPE_HM05
+	goto_if_eq GraniteCave_1F_EventScript_ExplainFalseSwipe
 	msgbox GraniteCave_1F_Text_ExplainFlash, MSGBOX_DEFAULT
+	release
+	end
+
+GraniteCave_1F_EventScript_ExplainFalseSwipe:: @ 822DA8A
+	msgbox GraniteCave_1F_Text_ExplainFalseSwipe, MSGBOX_DEFAULT
 	release
 	end
 
@@ -37,3 +46,10 @@ GraniteCave_1F_Text_ExplainFlash: @ 822DBB7
 	.string "But, to use it, you need the GYM BADGE\n"
 	.string "from DEWFORD's POKéMON GYM.$"
 
+GraniteCave_1F_Text_ExplainFalseSwipe: @ 822DBB7
+	.string "Teach that hidden move FALSE SWIPE\n"
+	.string "to a POKéMON and use it.\p"
+	.string "It won't KO the target\n"
+	.string "POKéMON.\p"
+	.string "It won't help at all with this\n"
+	.string "dark cave!$"

@@ -15,6 +15,7 @@
 #include "constants/items.h"
 #include "constants/hold_effects.h"
 #include "constants/tv.h"
+#include "speedchoice.h"
 
 extern u16 gUnknown_0203CF30[];
 
@@ -31,6 +32,7 @@ EWRAM_DATA struct BagPocket gBagPockets[POCKETS_COUNT] = {0};
 // rodata
 #include "data/text/item_descriptions.h"
 #include "data/items.h"
+#include "constants/moves.h"
 
 // code
 static u16 GetBagItemQuantity(u16 *quantity)
@@ -914,7 +916,11 @@ u8 ItemId_GetHoldEffectParam(u16 itemId)
 
 const u8 *ItemId_GetDescription(u16 itemId)
 {
-    return gItems[SanitizeItemId(itemId)].description;
+	if (itemId == ITEM_HM05_FLASH && CheckSpeedchoiceOption(EASY_FALSE_SWIPE, EASY_FALSE_SWIPE_HM05)){
+		return sHM05FalseSwipeDesc;
+	}
+
+	return gItems[SanitizeItemId(itemId)].description;
 }
 
 u8 ItemId_GetImportance(u16 itemId)
