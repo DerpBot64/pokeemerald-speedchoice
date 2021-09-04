@@ -36,6 +36,12 @@ GAME_CODE   := SPDC
 MAKER_CODE  := 01
 REVISION    := 0
 MODERN      ?= 0
+DEVMODE     ?= 0
+
+BUILD_NAME     := emerald-speedchoice
+ifeq ($(DEVMODE),1)
+BUILD_NAME     := $(BUILD_NAME)-dev
+endif
 
 SHELL := /bin/bash -o pipefail
 
@@ -61,13 +67,13 @@ DATA_ASM_BUILDDIR = $(OBJ_DIR)/$(DATA_ASM_SUBDIR)
 SONG_BUILDDIR = $(OBJ_DIR)/$(SONG_SUBDIR)
 MID_BUILDDIR = $(OBJ_DIR)/$(MID_SUBDIR)
 
-ASFLAGS := -mcpu=arm7tdmi --defsym MODERN=$(MODERN)
+ASFLAGS := -mcpu=arm7tdmi --defsym MODERN=$(MODERN) --defsym DEVMODE=$(DEVMODE)
 
 ifeq ($(MODERN),0)
 CC1             := tools/agbcc/bin/agbcc$(EXE)
 override CFLAGS += -mthumb-interwork -Wimplicit -Wparentheses -Werror -O2 -fhex-asm -g
-ROM := pokeemerald-speedchoice.gba
-OBJ_DIR := build/emerald
+ROM := poke$(BUILD_NAME).gba
+OBJ_DIR := build/$(BUILD_NAME)
 LIBPATH := -L ../../tools/agbcc/lib
 else
 CC1              = $(shell $(CC) --print-prog-name=cc1) -quiet
@@ -77,7 +83,7 @@ OBJ_DIR := build/modern
 LIBPATH := -L "$(dir $(shell $(CC) -mthumb -print-file-name=libgcc.a))" -L "$(dir $(shell $(CC) -mthumb -print-file-name=libc.a))"
 endif
 
-CPPFLAGS := -iquote include -iquote $(GFLIB_SUBDIR) -Wno-trigraphs -DMODERN=$(MODERN)
+CPPFLAGS := -iquote include -iquote $(GFLIB_SUBDIR) -Wno-trigraphs -DMODERN=$(MODERN) -DDEVMODE=$(DEVMODE)
 ifeq ($(MODERN),0)
 CPPFLAGS += -I tools/agbcc/include -I tools/agbcc
 endif
@@ -103,6 +109,8 @@ TOOLDIRS := $(filter-out tools/agbcc tools/binutils,$(wildcard tools/*))
 TOOLBASE = $(TOOLDIRS:tools/%=%)
 TOOLS = $(foreach tool,$(TOOLBASE),tools/$(tool)/$(tool)$(EXE))
 
+ALL_BUILDS := emerald-speedchoice emerald-speedchoice-dev
+
 MAKEFLAGS += --no-print-directory
 
 # Clear the default suffixes
@@ -115,7 +123,7 @@ MAKEFLAGS += --no-print-directory
 # Secondary expansion is required for dependency variables in object rules.
 .SECONDEXPANSION:
 
-.PHONY: all rom clean compare tidy tools mostlyclean clean-tools $(TOOLDIRS) berry_fix libagbsyscall modern patch ini release
+.PHONY: all rom clean compare tidy tools mostlyclean clean-tools $(TOOLDIRS) $(ALL_BUILDS) berry_fix libagbsyscall modern patch ini release
 
 infoshell = $(foreach line, $(shell $1 | sed "s/ /__SPACE__/g"), $(info $(subst __SPACE__, ,$(line))))
 
@@ -362,5 +370,8 @@ $(INI): $(ROM)
 
 $(PATCH): $(ROM)
 	$(XDELTA) -f -e -s baserom.gba $< $@
+	
+speedchoice:     ; @$(MAKE)
+dev:             ; @$(MAKE) DEVMODE=1
 
 print-% : ; $(info $* is a $(flavor $*) variable set to [$($*)]) @true

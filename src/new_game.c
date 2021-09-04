@@ -48,6 +48,8 @@
 #include "speedchoice.h"
 #include "constants/items.h"
 #include "done_button.h"
+#include "constants/moves.h"
+#include "malloc.h"
 
 extern const u8 EventScript_ResetAllMapFlags[];
 
@@ -227,12 +229,53 @@ void NewGameInitData(void)
     ResetTrainerHillResults();
     ResetContestLinkResults();
 
-    // ADD DONE BUTTON
-    AddBagItem(ITEM_DONE_BUTTON, 1);
     //if(CheckSpeedchoiceOption(EARLY_BIKE, EARLY_BIKE_YES) == TRUE) {
         AddBagItem(ITEM_MACH_BIKE, 1);
         FlagSet(FLAG_RECEIVED_BIKE); // put the flag here for making sure you got the bicycle
     //}
+	// ADD DONE BUTTON
+	AddBagItem(ITEM_DONE_BUTTON, 1);
+
+
+#if DEVMODE
+    {
+
+		struct Pokemon *mon = (void*) AllocZeroed(sizeof(struct Pokemon));
+
+        if (mon != NULL)
+        {
+            u32 pid;
+            u32 otid = T2_READ_32(gSaveBlock2Ptr->playerTrainerId);
+            pid = Random32();
+            CreateMon(mon, SPECIES_MEWTWO, 100, 31, TRUE, pid, OT_ID_PLAYER_ID, 0);
+            SetMonMoveSlot(mon, MOVE_PSYCHIC, 0);
+            SetMonMoveSlot(mon, MOVE_FLY, 1);
+            SetMonMoveSlot(mon, MOVE_SURF, 2);
+            SetMonMoveSlot(mon, MOVE_CUT, 3);
+            GiveMonToPlayer(mon);
+            Free(mon);
+        }
+        FlagSet(FLAG_VISITED_PETALBURG_CITY);
+        FlagSet(FLAG_VISITED_LITTLEROOT_TOWN);
+        FlagSet(FLAG_VISITED_OLDALE_TOWN);
+        FlagSet(FLAG_VISITED_DEWFORD_TOWN);
+        FlagSet(FLAG_VISITED_LAVARIDGE_TOWN);
+        FlagSet(FLAG_VISITED_FALLARBOR_TOWN);
+        FlagSet(FLAG_VISITED_VERDANTURF_TOWN);
+        FlagSet(FLAG_VISITED_PACIFIDLOG_TOWN);
+        FlagSet(FLAG_VISITED_SLATEPORT_CITY);
+        FlagSet(FLAG_VISITED_MAUVILLE_CITY);
+        FlagSet(FLAG_VISITED_RUSTBORO_CITY);
+        FlagSet(FLAG_VISITED_FORTREE_CITY);
+        FlagSet(FLAG_VISITED_LILYCOVE_CITY);
+        FlagSet(FLAG_VISITED_MOSSDEEP_CITY);
+        FlagSet(FLAG_VISITED_SOOTOPOLIS_CITY);
+        FlagSet(FLAG_VISITED_EVER_GRANDE_CITY);
+
+		SetMoney(&gSaveBlock1Ptr->money, 999999);
+    }
+#endif //DEVMODE
+
 }
 
 static void ResetMiniGamesResults(void)
