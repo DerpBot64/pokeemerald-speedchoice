@@ -1,6 +1,6 @@
 # Pokémon Emerald Speedchoice Edition
 
-###Version Derpbox 64.0.0
+###Version Derpbot 64.0.0
 
 Updates on top of previous changelog below:
 
