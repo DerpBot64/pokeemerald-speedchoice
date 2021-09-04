@@ -1,8 +1,10 @@
 # Pokémon Emerald Speedchoice Edition
 
-### Version Derpbox 64.0.0
+### Version Derpbot 64.0.0
 
-Updates on top of main repository version 1.2.1 below:
+Updates on top of main repository version 1.2.1 below.
+
+See [**Here**](https://github.com/DerpBot64/UPR-Speedchoice) for randomizer compatible with this fork.
 
 ## Bugfixes:
 - Fixed a bug in the randomizer config that caused TM move choices to be partially duplicated and override earlier TMs, replacing set ones like Sweet Scent.
