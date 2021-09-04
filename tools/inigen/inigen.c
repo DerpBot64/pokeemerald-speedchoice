@@ -15,6 +15,7 @@
 #include "constants/moves.h"
 #include "constants/pokemon.h"
 #include "constants/event_objects.h"
+#include "constants/speedchoice.h"
 
 /*
  * ---------------------------------------------------------
@@ -98,7 +99,7 @@ const struct StaticPokemon gStaticPokemon[][8] = {
     {{"FarawayIsland_Interior_EventScript_Mew", 0x1B}, {"FarawayIsland_Interior_EventScript_Mew", 0x55}, {"FarawayIsland_Interior_EventScript_MewDefeated", 0x6}, {"FarawayIsland_Interior_EventScript_PlayerOrMewRan", 0x3}},
     {{"NavelRock_Top_EventScript_HoOh", 0x30}, {"NavelRock_Top_EventScript_HoOh", 0x5F}, {"NavelRock_Top_EventScript_DefeatedHoOh", 0x6}, {"NavelRock_Top_EventScript_RanFromHoOh", 0x3}},
     {{"NavelRock_Bottom_EventScript_Lugia", 0x45}, {"NavelRock_Bottom_EventScript_Lugia", 0x50}, {"NavelRock_Bottom_EventScript_DefeatedLugia", 0x6}, {"NavelRock_Bottom_EventScript_RanFromLugia", 0x3}},
-	{{"LavaridgeTown_EventScript_EggWoman", 0x47}},
+	{{"LavaridgeTown_EventScript_EggWoman", 0x48}},
 	{{"MossdeepCity_StevensHouse_EventScript_GiveBeldum", 0x3}, {"MossdeepCity_StevensHouse_EventScript_GiveBeldum", 0x6}, {"MossdeepCity_StevensHouse_EventScript_ReceivedBeldumFanfare", 0x2}, {"MossdeepCity_StevensHouse_EventScript_ReceivedBeldumFanfare", 0x13}},
     {{"Route119_WeatherInstitute_2F_EventScript_ReceiveCastform", 0xB}, {"Route119_WeatherInstitute_2F_EventScript_ReceiveCastform", 0xE}},
 };
@@ -516,7 +517,7 @@ int main(int argc, char ** argv)
     sh_text = GetSectionHeaderByName(".text");
 
     // Start writing the INI
-    print("[%s]\n", romName);
+    print("[%s (%s)]\n", romName, SPEEDCHOICE_VERSION);
     print("Game=%s\n", romCode);
     print("Version=0\n");
     print("Type=Em\n");
