@@ -896,8 +896,14 @@ static bool8 TryProduceOrHatchEgg(struct DayCare *daycare)
     if (daycare->offspringPersonality == 0 && validEggs == DAYCARE_MON_COUNT && (daycare->mons[1].steps & 0xFF) == 0xFF)
     {
         u8 compatability = GetDaycareCompatibilityScore(daycare);
-        if (compatability > 0){
-        	TriggerPendingDaycareEgg();
+        if(CheckSpeedchoiceOption(FAST_EGG_BREED, FAST_EGG_BREED_NO)){
+        	if (compatability > (Random() * 100u) / USHRT_MAX)
+        	    TriggerPendingDaycareEgg();
+        }
+        else{
+        	if (compatability > 0){
+        		TriggerPendingDaycareEgg();
+        	}
         }
     }
 
@@ -915,7 +921,7 @@ static bool8 TryProduceOrHatchEgg(struct DayCare *daycare)
                 continue;
 
             eggCycles = GetMonData(&gPlayerParty[i], MON_DATA_FRIENDSHIP);
-            if (eggCycles != 0 && 0 /*CheckSpeedchoiceOption(FAST_EGG_HATCH, FAST_EGG_HATCH_NO) == TRUE*/)
+            if (eggCycles != 0 && CheckSpeedchoiceOption(FAST_EGG_HATCH, FAST_EGG_HATCH_NO))
             {
                 if (eggCycles >= toSub)
                     eggCycles -= toSub;

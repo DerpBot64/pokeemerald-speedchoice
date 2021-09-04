@@ -259,30 +259,65 @@ static u8 ChooseWildMonIndex_Fishing(u8 rod)
 
     // 60/40 for new wild encounter table
 
-    // COMMONS
-    // slot 1 (60%)
-    if(rand < 12)
-        return 0;
-    if(rand >= 12 && rand < 24)
-        return 2;
-    if(rand >= 24 && rand < 36)
-        return 4;
-    if(rand >= 36 && rand < 48)
-        return 6;
-    if(rand >= 48 && rand < 60)
-        return 8;
+    // no fishing memes allowed
+        if (CheckSpeedchoiceOption(MEME_FISH, MEME_FISH_NO))
+        {
+            switch (rod)
+            {
+            case OLD_ROD:
+                if (rand < 60)
+                    wildMonIndex = 0;
+                else
+                    wildMonIndex = 1;
+                break;
+            case GOOD_ROD:
+                if (rand < 30)
+                    wildMonIndex = 2;
+                else if (rand < 70)
+                    wildMonIndex = 3;
+                else
+                    wildMonIndex = 4;
+                break;
+            case SUPER_ROD:
+                if (rand < 20)
+                    wildMonIndex = 5;
+                else if (rand < 40)
+                    wildMonIndex = 6;
+                else if (rand < 60)
+                    wildMonIndex = 7;
+                else if (rand < 80)
+                    wildMonIndex = 8;
+                else
+                    wildMonIndex = 9;
+                break;
+            }
+        }
+        else{//fishing memes allowed
+        	// COMMONS
+    		// slot 1 (60%)
+			if(rand < 12)
+				return 0;
+			if(rand >= 12 && rand < 24)
+				return 2;
+			if(rand >= 24 && rand < 36)
+				return 4;
+			if(rand >= 36 && rand < 48)
+				return 6;
+			if(rand >= 48 && rand < 60)
+				return 8;
 
-    // UNCOMMONS
-    // slot 2 (40%)
-    if(rand >= 60 && rand < 70)
-        return 1;
-    if(rand >= 70 && rand < 80)
-        return 3;
-    if(rand >= 80 && rand < 90)
-        return 5;
-    if(rand >= 90 && rand < 95)
-        return 7;
-    return 9;
+			// UNCOMMONS
+			// slot 2 (40%)
+			if(rand >= 60 && rand < 70)
+				return 1;
+			if(rand >= 70 && rand < 80)
+				return 3;
+			if(rand >= 80 && rand < 90)
+				return 5;
+			if(rand >= 90 && rand < 95)
+				return 7;
+			return 9;
+        }
 /*
         switch (rod)
         {

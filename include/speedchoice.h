@@ -7,7 +7,7 @@
 
 // The current total number of selectable options. Be sure to count preset too and
 // player name.
-#define CURRENT_OPTIONS_NUM 14
+#define CURRENT_OPTIONS_NUM 17
 
 // Maximum number of possible selectable options per option.
 #define MAX_CHOICES 6
@@ -19,7 +19,7 @@
 #define ALLOPTIONS_PER_PAGE OPTIONS_PER_PAGE + 2
 
 // Number of defined pages.
-#define MAX_PAGES 3
+#define MAX_PAGES 4
 
 // Deprecated macro. May have been in use for Sapphire Speedchoice when the window system
 // was different back then.
@@ -67,7 +67,6 @@
  * Meme Island (made default)
  * Better Marts (made default)
  * Early Bike (made default)
- * Fast Egg Hatch (made default)
  *
  * Please ensure when rebasing these are readded per implementation.
  */
@@ -98,6 +97,9 @@ enum
     //EARLY_BIKE, // DEPRECATED (default)
     //FAST_EGG_HATCH, // DEPRECATED (default)
     GEN_7_X_ITEMS,
+	FAST_EGG_HATCH,
+	FAST_EGG_BREED,
+	MEME_FISH,
     EVO_EVERY_LEVEL,
 
     // ----------------------
@@ -291,12 +293,29 @@ enum
 };
 
 // ----------------------
-// FAST EGG HATCHING ENUM (DEPRECATED)
+// FAST EGG HATCHING ENUM
 // ----------------------
 enum
 {
     FAST_EGG_HATCH_YES,
     FAST_EGG_HATCH_NO
+};
+
+// ----------------------
+// FAST EGG HATCHING ENUM
+// ----------------------
+enum
+{
+    FAST_EGG_BREED_YES,
+    FAST_EGG_BREED_NO
+};
+// ----------------------
+// MEME FISHING ENUM
+// ----------------------
+enum
+{
+    MEME_FISH_YES,
+    MEME_FISH_NO
 };
 // ----------------------
 // GEN 7 X ITEMS ENUM

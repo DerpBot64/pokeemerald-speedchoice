@@ -164,6 +164,8 @@ const u8 gSpeedchoiceOptionEasyFalseSwipe[] = _("{COLOR GREEN}{SHADOW LIGHT_GREE
 const u8 gSpeedchoiceOptionFastCatch[] = _("{COLOR GREEN}{SHADOW LIGHT_GREEN}FAST CATCH");
 const u8 gSpeedchoiceOptionEarlyBike[] = _("{COLOR GREEN}{SHADOW LIGHT_GREEN}EARLY BIKE");
 const u8 gSpeedchoiceOptionFastEggHatch[] = _("{COLOR GREEN}{SHADOW LIGHT_GREEN}FAST EGG HATCH");
+const u8 gSpeedchoiceOptionFastEggBreed[] = _("{COLOR GREEN}{SHADOW LIGHT_GREEN}FAST EGG BREED");
+const u8 gSpeedchoiceOptionMemeFish[] = _("{COLOR GREEN}{SHADOW LIGHT_GREEN}MEME FISHING");
 
 // PAGE 5
 const u8 gSpeedchoiceOptionGen7XItems[] = _("{COLOR GREEN}{SHADOW LIGHT_GREEN}GEN 7 X ITEMS");
@@ -205,9 +207,11 @@ const u8 gSpeedchoiceTooltipNiceMenuOrder[] = _("Swaps the location of SUMMARY a
 const u8 gSpeedchoiceTooltipEasyFalseSwipe[] = _("Makes FALSE SWIPE guaranteed\nOFF: Vanilla game behavior\pTUTOR: The tutor in Slateport teaches\nFALSE SWIPE.\pHM05: Replaces HM05 FLASH with\nHM05 FALSE SWIPE.");
 const u8 gSpeedchoiceTooltipFastCatch[] = _("All Pokeballs are guaranteed to catch.");
 const u8 gSpeedchoiceTooltipEarlyBike[] = _("Start game with Bicycle.");
-const u8 gSpeedchoiceTooltipFastEggHatch[] = _("Makes eggs hatch quickly.");
+const u8 gSpeedchoiceTooltipFastEggBreeding[] = _("Eggs generate every cycle\nin the daycare.");
+const u8 gSpeedchoiceTooltipFastEggHatching[] = _("Eggs immediately hatch every cycle.");
 const u8 gSpeedchoiceTooltipGen7XItems[] = _("Stat boost +2 instead of +1.");
-const u8 gSpeedchoiceTooltipEvoEveryLv[] = _("STATIC: {PKMN} evolve into a random\nbut set species every lv.\pRAND: Same thing as STATIC but\nrandom non-static every lv.");
+const u8 gSpeedchoiceTooltipEvoEveryLv[] = _("{PKMN} evolve into a random\nbut set species every lv.");
+const u8 gSpeedchoiceTooltipMemeFishing[] = _("Old and Good Rod can catch high\nlevel pokemon.");
 
 // START GAME
 const u8 gSpeedchoiceStartGameText[] = _("CV: {STR_VAR_1}\nStart the game?");
@@ -260,6 +264,9 @@ static const u8 gPresetVanilla[CURRENT_OPTIONS_NUM] = {
     EASY_FALSE_SWIPE_OFF,   // EASY_FALSE_SWIPE
     FAST_CATCH_OFF,         // FAST_CATCH
     EARLY_BIKE_NO,          // EARLY_BIKE
+	FAST_EGG_HATCH_NO,      // FAST_EGG_HATCH
+	FAST_EGG_BREED_NO,      // FAST_EGG_BREEED
+	MEME_FISH_NO,           // MEME_FISH
     EVO_EV_OFF              // EVO_EVERY_LEVEL
 };
 
@@ -277,6 +284,9 @@ static const u8 gPresetBingo[CURRENT_OPTIONS_NUM] = {
     EASY_FALSE_SWIPE_TUTOR, // EASY_FALSE_SWIPE
     FAST_CATCH_OFF,         // FAST_CATCH
     GEN_7_X_ITEMS_ON,       // GEN_7_X_ITEMS
+	FAST_EGG_HATCH_YES,     // FAST_EGG_HATCH
+	FAST_EGG_BREED_YES,     // FAST_EGG_BREEED
+	MEME_FISH_YES,          // MEME_FISH
     EVO_EV_OFF              // EVO_EVERY_LEVEL
 };
 
@@ -294,6 +304,9 @@ static const u8 gPresetCEA[CURRENT_OPTIONS_NUM] = {
     EASY_FALSE_SWIPE_TUTOR, // EASY_FALSE_SWIPE
     FAST_CATCH_ON,          // FAST_CATCH
     GEN_7_X_ITEMS_ON,       // GEN_7_X_ITEMS
+	FAST_EGG_HATCH_YES,     // FAST_EGG_HATCH
+	FAST_EGG_BREED_YES,     // FAST_EGG_BREEED
+	MEME_FISH_YES,          // MEME_FISH
     EVO_EV_OFF              // EVO_EVERY_LEVEL
 };
 
@@ -311,6 +324,9 @@ static const u8 gPresetRace[CURRENT_OPTIONS_NUM] = {
     EASY_FALSE_SWIPE_TUTOR, // EASY_FALSE_SWIPE
     FAST_CATCH_OFF,         // FAST_CATCH
     GEN_7_X_ITEMS_ON,       // GEN_7_X_ITEMS
+	FAST_EGG_HATCH_NO,      // FAST_EGG_HATCH
+	FAST_EGG_BREED_NO,      // FAST_EGG_BREEED
+	MEME_FISH_NO,           // MEME_FISH
     EVO_EV_OFF              // EVO_EVERY_LEVEL
 };
 
@@ -328,6 +344,9 @@ static const u8 gPresetMeme[CURRENT_OPTIONS_NUM] = {
     EASY_FALSE_SWIPE_OFF,   // EASY_FALSE_SWIPE
     FAST_CATCH_OFF,         // FAST_CATCH
     GEN_7_X_ITEMS_OFF,      // GEN_7_X_ITEMS
+	FAST_EGG_HATCH_NO,      // FAST_EGG_HATCH
+	FAST_EGG_BREED_NO,      // FAST_EGG_BREEED
+	MEME_FISH_YES,          // MEME_FISH
     EVO_EV_ON               // EVO_EVERY_LEVEL
 };
 
@@ -618,7 +637,40 @@ const struct SpeedchoiceOption SpeedchoiceOptions[CURRENT_OPTIONS_NUM + 1] = // 
         /* Option Tooltip */ gSpeedchoiceTooltipGen7XItems,
         /* Option Usable  */ TRUE
     },
-    // ----------------------------------
+	// ----------------------------------
+	// FAST EGG HATCH OPTION
+	// ----------------------------------
+	{
+		/* Option Count   */ 2,
+		/* Option Type    */ NORMAL,
+		/* Option Preset  */ gSpeedchoiceOptionFastEggHatch,
+		/* Option Text    */ OptionChoiceConfigOnOff,
+		/* Option Tooltip */ gSpeedchoiceTooltipFastEggHatching,
+		/* Option Usable  */ TRUE
+	},
+	// ----------------------------------
+	// FAST EGG BREED OPTION
+	// ----------------------------------
+	{
+		/* Option Count   */ 2,
+		/* Option Type    */ NORMAL,
+		/* Option Preset  */ gSpeedchoiceOptionFastEggBreed,
+		/* Option Text    */ OptionChoiceConfigOnOff,
+		/* Option Tooltip */ gSpeedchoiceTooltipFastEggBreeding,
+		/* Option Usable  */ TRUE
+	},
+	// ----------------------------------
+	// MEME FISHING OPTION
+	// ----------------------------------
+	{
+		/* Option Count   */ 2,
+		/* Option Type    */ NORMAL,
+		/* Option Preset  */ gSpeedchoiceOptionMemeFish,
+		/* Option Text    */ OptionChoiceConfigOnOff,
+		/* Option Tooltip */ gSpeedchoiceTooltipMemeFishing,
+		/* Option Usable  */ TRUE
+		},
+// ----------------------------------
     // EVO EVERY LEVEL OPTION
     // ----------------------------------
     { 
@@ -701,6 +753,9 @@ void SetOptionChoicesAndConfigFromPreset(const u8 *preset)
     gSaveBlock2Ptr->speedchoiceConfig.easyFalseSwipe = preset[EASY_FALSE_SWIPE];
     gSaveBlock2Ptr->speedchoiceConfig.fastCatch = preset[FAST_CATCH];
     gSaveBlock2Ptr->speedchoiceConfig.gen7XItems = preset[GEN_7_X_ITEMS];
+    gSaveBlock2Ptr->speedchoiceConfig.fastEggHatch = preset[FAST_EGG_HATCH];
+    gSaveBlock2Ptr->speedchoiceConfig.fastEggBreed = preset[FAST_EGG_BREED];
+    gSaveBlock2Ptr->speedchoiceConfig.memeFish = preset[MEME_FISH];
     gSaveBlock2Ptr->speedchoiceConfig.evoEveryLevel = preset[EVO_EVERY_LEVEL];
 }
 
@@ -736,6 +791,12 @@ bool8 CheckSpeedchoiceOption(u8 option, u8 selection)
             return gSaveBlock2Ptr->speedchoiceConfig.fastCatch == selection;
         case GEN_7_X_ITEMS:
             return gSaveBlock2Ptr->speedchoiceConfig.gen7XItems == selection;
+        case FAST_EGG_HATCH:
+			return gSaveBlock2Ptr->speedchoiceConfig.fastEggHatch == selection;
+        case FAST_EGG_BREED:
+			return gSaveBlock2Ptr->speedchoiceConfig.fastEggBreed == selection;
+        case MEME_FISH:
+			return gSaveBlock2Ptr->speedchoiceConfig.memeFish == selection;
         case EVO_EVERY_LEVEL:
             return gSaveBlock2Ptr->speedchoiceConfig.evoEveryLevel == selection;
         default:
@@ -1274,6 +1335,9 @@ static void SaveSpeedchoiceOptions(u8 taskId)
     gSaveBlock2Ptr->speedchoiceConfig.easyFalseSwipe = gLocalSpeedchoiceConfig.optionConfig[EASY_FALSE_SWIPE];
     gSaveBlock2Ptr->speedchoiceConfig.fastCatch = gLocalSpeedchoiceConfig.optionConfig[FAST_CATCH];
     gSaveBlock2Ptr->speedchoiceConfig.gen7XItems = gLocalSpeedchoiceConfig.optionConfig[GEN_7_X_ITEMS];
+    gSaveBlock2Ptr->speedchoiceConfig.fastEggHatch = gLocalSpeedchoiceConfig.optionConfig[FAST_EGG_HATCH];
+    gSaveBlock2Ptr->speedchoiceConfig.fastEggBreed = gLocalSpeedchoiceConfig.optionConfig[FAST_EGG_BREED];
+    gSaveBlock2Ptr->speedchoiceConfig.memeFish = gLocalSpeedchoiceConfig.optionConfig[MEME_FISH];
     gSaveBlock2Ptr->speedchoiceConfig.evoEveryLevel = gLocalSpeedchoiceConfig.optionConfig[EVO_EVERY_LEVEL];
 
     // write the playername.

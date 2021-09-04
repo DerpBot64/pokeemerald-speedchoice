@@ -471,8 +471,10 @@ struct SpeedchoiceSaveOptions
     u8 easyFalseSwipe:2;
     u8 fastCatch:1;
     //u8 earlyBike:1;
-    //u8 fastEggHatch:1;
     u8 gen7XItems:1;
+    u8 fastEggHatch:1;
+    u8 fastEggBreed:1;
+    u8 memeFish:1;
     u8 evoEveryLevel:1;
 };
 

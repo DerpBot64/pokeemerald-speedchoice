@@ -37,7 +37,10 @@
 	.set EASY_FALSE_SWIPE, 10
     .set FAST_CATCH, 11
     .set GEN_7_X_ITEMS, 12
-    .set EVO_EVERY_LEVEL, 13
+	.set FAST_EGG_HATCH, 13
+	.set FAST_EGG_BREED, 14
+	.set MEME_FISH, 15
+    .set EVO_EVERY_LEVEL, 16
 
     @ -------------
     @ option enums
