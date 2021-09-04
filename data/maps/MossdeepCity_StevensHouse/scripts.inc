@@ -65,6 +65,11 @@ MossdeepCity_StevensHouse_EventScript_StevenGivesDive:: @ 82227CA
 
 	checkspeedchoice PLOTLESS, PLOT_KEEP
 	goto_if TRUE, AfterStevenDive
+	@ regis main cavern doors opened
+	playse SE_DOOR
+	msgbox gText_DoorOpenedFarAway, MSGBOX_DEFAULT
+	closemessage
+	setflag FLAG_REGI_DOORS_OPENED
 	@ seafloor cavern
 	setvar VAR_ROUTE128_STATE, 1
 	setvar VAR_SOOTOPOLIS_CITY_STATE, 1
