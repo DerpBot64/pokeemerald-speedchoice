@@ -118,7 +118,7 @@ Route121_SafariZoneEntrance_Text_ComeInAndEnjoy: @ 82A4E7E
 
 Route121_SafariZoneEntrance_Text_FirstTimeInfo: @ 82A4EA1
 	.string "When you enter the SAFARI ZONE, you\n"
-	.string "start with 30 SAFARI BALLS for\l"
+	.string "start with 99 SAFARI BALLS for\l"
 	.string "catching POKéMON.\p"
 	.string "The SAFARI Game is over when you run\n"
 	.string "out of SAFARI BALLS, or when you've\l"
@@ -145,7 +145,7 @@ Route121_SafariZoneEntrance_Text_HereAreYourSafariBalls: @ 82A5036
 	.string "Here are your SAFARI BALLS.$"
 
 Route121_SafariZoneEntrance_Text_Received30SafariBalls: @ 82A5052
-	.string "{PLAYER} received 30 SAFARI BALLS.$"
+	.string "{PLAYER} received 99 SAFARI BALLS.$"
 
 Route121_SafariZoneEntrance_Text_PleaseEnjoyYourself: @ 82A506F
 	.string "We'll let you know when your game\n"
