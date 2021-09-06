@@ -36,3 +36,4 @@ porymap.project.cfg
 *.sna
 *.ini
 .project
+*.ips
