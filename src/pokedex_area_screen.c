@@ -92,8 +92,6 @@ static void DestroyAreaMarkerSprites(void);
 static const u32 sAreaGlow_Pal[] = INCBIN_U32("graphics/pokedex/area_glow.gbapal");
 static const u32 sAreaGlow_Gfx[] = INCBIN_U32("graphics/pokedex/area_glow.4bpp.lz");
 
-static const u16 sSpeciesHiddenFromAreaScreen[] = { SPECIES_WYNAUT };
-
 static const u16 sMovingRegionMapSections[3] =
 {
     MAPSEC_MARINE_CAVE,
@@ -340,64 +338,53 @@ static void FindMapsWithMon(u16 species)
         sPokedexAreaScreen->unk6E4 = 0;
 
     roamer = &gSaveBlock1Ptr->roamer;
-    if (species != roamer->species)
-    {
-        sPokedexAreaScreen->numOverworldAreas = 0;
-        sPokedexAreaScreen->numSpecialAreas = 0;
-        for (i = 0; i < ARRAY_COUNT(sSpeciesHiddenFromAreaScreen); i++)
-        {
-            if (sSpeciesHiddenFromAreaScreen[i] == species)
-                return;
-        }
 
-        for (i = 0; sFeebasData[i][0] != NUM_SPECIES; i++)
-        {
-            if (species == sFeebasData[i][0])
-            {
-                switch (sFeebasData[i][1])
-                {
-                    case MAP_GROUP_OVERWORLD_MONS:
-                        SetAreaHasMon(sFeebasData[i][1], sFeebasData[i][2]);
-                        break;
-                    case MAP_GROUP_SPECIAL_MONS_1:
-                    case MAP_GROUP_SPECIAL_MONS_2:
-                        SetSpecialMapHasMon(sFeebasData[i][1], sFeebasData[i][2]);
-                        break;
-                }
-            }
-        }
+	sPokedexAreaScreen->numOverworldAreas = 0;
+	sPokedexAreaScreen->numSpecialAreas = 0;
 
-        for (i = 0; gWildMonHeaders[i].mapGroup != 0xFF; i++)
-        {
-            if (MapHasMon(&gWildMonHeaders[i], species))
-            {
-                switch (gWildMonHeaders[i].mapGroup)
-                {
-                    case MAP_GROUP_OVERWORLD_MONS:
-                        SetAreaHasMon(gWildMonHeaders[i].mapGroup, gWildMonHeaders[i].mapNum);
-                        break;
-                    case MAP_GROUP_SPECIAL_MONS_1:
-                    case MAP_GROUP_SPECIAL_MONS_2:
-                        SetSpecialMapHasMon(gWildMonHeaders[i].mapGroup, gWildMonHeaders[i].mapNum);
-                        break;
-                }
-            }
-        }
-    }
-    else
-    {
-        sPokedexAreaScreen->numSpecialAreas = 0;
-        if (roamer->active)
-        {
-            GetRoamerLocation(&sPokedexAreaScreen->overworldAreasWithMons[0].mapGroup, &sPokedexAreaScreen->overworldAreasWithMons[0].mapNum);
-            sPokedexAreaScreen->overworldAreasWithMons[0].regionMapSectionId = Overworld_GetMapHeaderByGroupAndId(sPokedexAreaScreen->overworldAreasWithMons[0].mapGroup, sPokedexAreaScreen->overworldAreasWithMons[0].mapNum)->regionMapSectionId;
-            sPokedexAreaScreen->numOverworldAreas = 1;
-        }
-        else
-        {
-            sPokedexAreaScreen->numOverworldAreas = 0;
-        }
-    }
+    //do the roamer now, then do rest of data building as normal without stopping if it is the roamer
+
+	if (roamer->active && species == roamer->species)
+	{
+		GetRoamerLocation(&sPokedexAreaScreen->overworldAreasWithMons[0].mapGroup, &sPokedexAreaScreen->overworldAreasWithMons[0].mapNum);
+		sPokedexAreaScreen->overworldAreasWithMons[0].regionMapSectionId = Overworld_GetMapHeaderByGroupAndId(sPokedexAreaScreen->overworldAreasWithMons[0].mapGroup, sPokedexAreaScreen->overworldAreasWithMons[0].mapNum)->regionMapSectionId;
+		sPokedexAreaScreen->numOverworldAreas = 1;
+	}
+
+	for (i = 0; sFeebasData[i][0] != NUM_SPECIES; i++)
+	{
+		if (species == sFeebasData[i][0])
+		{
+			switch (sFeebasData[i][1])
+			{
+				case MAP_GROUP_OVERWORLD_MONS:
+					SetAreaHasMon(sFeebasData[i][1], sFeebasData[i][2]);
+					break;
+				case MAP_GROUP_SPECIAL_MONS_1:
+				case MAP_GROUP_SPECIAL_MONS_2:
+					SetSpecialMapHasMon(sFeebasData[i][1], sFeebasData[i][2]);
+					break;
+			}
+		}
+	}
+
+	for (i = 0; gWildMonHeaders[i].mapGroup != 0xFF; i++)
+	{
+		if (MapHasMon(&gWildMonHeaders[i], species))
+		{
+			switch (gWildMonHeaders[i].mapGroup)
+			{
+				case MAP_GROUP_OVERWORLD_MONS:
+					SetAreaHasMon(gWildMonHeaders[i].mapGroup, gWildMonHeaders[i].mapNum);
+					break;
+				case MAP_GROUP_SPECIAL_MONS_1:
+				case MAP_GROUP_SPECIAL_MONS_2:
+					SetSpecialMapHasMon(gWildMonHeaders[i].mapGroup, gWildMonHeaders[i].mapNum);
+					break;
+			}
+		}
+	}
+
 }
 
 static void SetAreaHasMon(u16 mapGroup, u16 mapNum)
@@ -425,12 +412,15 @@ static void SetSpecialMapHasMon(u16 mapGroup, u16 mapNum)
                 if (regionMapSectionId == sMovingRegionMapSections[i])
                     return;
             }
-
+            //disable landmark flags hiding areas from the pokedex area screen.
+            /*
             for (i = 0; sLandmarkData[i][0] != MAPSEC_NONE; i++)
             {
                 if (regionMapSectionId == sLandmarkData[i][0] && !FlagGet(sLandmarkData[i][1]))
                     return;
             }
+            */
+
 
             for (i = 0; i < sPokedexAreaScreen->numSpecialAreas; i++)
             {
