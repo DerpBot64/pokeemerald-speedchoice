@@ -272,6 +272,15 @@ void NewGameInitData(void)
         FlagSet(FLAG_VISITED_SOOTOPOLIS_CITY);
         FlagSet(FLAG_VISITED_EVER_GRANDE_CITY);
 
+        FlagSet(FLAG_BADGE01_GET);
+        FlagSet(FLAG_BADGE02_GET);
+        FlagSet(FLAG_BADGE03_GET);
+        FlagSet(FLAG_BADGE04_GET);
+        FlagSet(FLAG_BADGE05_GET);
+        FlagSet(FLAG_BADGE06_GET);
+        FlagSet(FLAG_BADGE07_GET);
+        FlagSet(FLAG_BADGE08_GET);
+
 		SetMoney(&gSaveBlock1Ptr->money, 999999);
     }
 #endif //DEVMODE

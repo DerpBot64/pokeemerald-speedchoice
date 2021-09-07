@@ -19,6 +19,7 @@
 #include "naming_screen.h"
 #include "random.h"
 #include "constants/rgb.h"
+#include "constants/speedchoice.h"
 
 // A macro was defined here to simplify the row used in Palette calls, but I haven't
 // used this yet.
@@ -103,7 +104,7 @@ const u8 gSystemText_TerminatorS[] = _("{COLOR RED}$");
 /* SPEEDCHOICE MENU TEXT (Header Text)             */
 /* ----------------------------------------------- */
 const u8 gSpeedchoiceTextHeader[] = _("{COLOR GREEN}{SHADOW LIGHT_GREEN}SPEEDCHOICE MENU");
-const u8 gSpeedchoiceCurrentVersion[] = _("{COLOR GREEN}{SHADOW LIGHT_GREEN}v64.0.0");
+const u8 gSpeedchoiceCurrentVersion[] = _("{COLOR GREEN}{SHADOW LIGHT_GREEN}v" SPEEDCHOICE_VERSION);
 
 /* ----------------------------------------------- */
 /* SPEEDCHOICE MENU TEXT (Option Choices)          */
@@ -1582,6 +1583,18 @@ static void DrawHeaderWindow(void)
     FillWindowPixelBuffer(SPD_WIN_TEXT_OPTION, 0x11);
     AddTextPrinterParameterized(SPD_WIN_TEXT_OPTION, SPEEDCHOICE_FONT_ID, gSpeedchoiceTextHeader, 4, 1, TEXT_SPEED_FF, NULL);
     width = GetStringWidth(SPEEDCHOICE_FONT_ID, gSpeedchoiceCurrentVersion, GetFontAttribute(SPEEDCHOICE_FONT_ID, FONTATTR_LETTER_SPACING));
+
+#if DEVMODE
+    {
+    	const u8 gSpeedchoiceTextDEV[]   = _("{COLOR GREEN}{SHADOW LIGHT_GREEN} DEV");
+
+    	s32 width2 = GetStringWidth(SPEEDCHOICE_FONT_ID,gSpeedchoiceTextDEV, GetFontAttribute(SPEEDCHOICE_FONT_ID, FONTATTR_LETTER_SPACING));
+
+    	width = width + width2;
+    	AddTextPrinterParameterized(SPD_WIN_TEXT_OPTION, SPEEDCHOICE_FONT_ID,gSpeedchoiceTextDEV, 204 - width2, 1, TEXT_SPEED_FF, NULL);
+    }
+#endif //DEVMODE
+
     AddTextPrinterParameterized(SPD_WIN_TEXT_OPTION, SPEEDCHOICE_FONT_ID, gSpeedchoiceCurrentVersion, 204 - width, 1, TEXT_SPEED_FF, NULL);
     CopyWindowToVram(SPD_WIN_TEXT_OPTION, 3);
 }

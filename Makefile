@@ -365,7 +365,7 @@ libagbsyscall:
 	@$(MAKE) -C libagbsyscall TOOLCHAIN=$(TOOLCHAIN)
 
 $(INI): $(ROM)
-	$(INIGEN) $(ELF) $@ --name "Emerald Speedchoice (U)" --code $(GAME_CODE)
+	$(INIGEN) $(ELF) $@ --name "Emerald Speedchoice (U)" --code $(GAME_CODE) --DEVMODE $(DEVMODE)
 	echo "MD5Hash="$(shell md5sum $< | cut -d' ' -f1) >> $@
 
 $(PATCH): $(ROM)
