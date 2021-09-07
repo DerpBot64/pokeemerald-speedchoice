@@ -253,7 +253,6 @@ static u8 ChooseWildMonIndex_WaterRock(void)
 
 static u8 ChooseWildMonIndex_Fishing(u8 rod)
 {
-    u8 wildMonIndex = 0;
     u8 rand = Random() % max(max(ENCOUNTER_CHANCE_FISHING_MONS_OLD_ROD_TOTAL, ENCOUNTER_CHANCE_FISHING_MONS_GOOD_ROD_TOTAL),
                              ENCOUNTER_CHANCE_FISHING_MONS_SUPER_ROD_TOTAL);
 
@@ -266,29 +265,29 @@ static u8 ChooseWildMonIndex_Fishing(u8 rod)
             {
             case OLD_ROD:
                 if (rand < 60)
-                    wildMonIndex = 0;
+                    return 0;
                 else
-                    wildMonIndex = 1;
+                	return 1;
                 break;
             case GOOD_ROD:
                 if (rand < 30)
-                    wildMonIndex = 2;
+                	return 2;
                 else if (rand < 70)
-                    wildMonIndex = 3;
+                    return 3;
                 else
-                    wildMonIndex = 4;
+                	return 4;
                 break;
             case SUPER_ROD:
                 if (rand < 20)
-                    wildMonIndex = 5;
+                	return 5;
                 else if (rand < 40)
-                    wildMonIndex = 6;
+                	return 6;
                 else if (rand < 60)
-                    wildMonIndex = 7;
+                	return 7;
                 else if (rand < 80)
-                    wildMonIndex = 8;
+                	return 8;
                 else
-                    wildMonIndex = 9;
+                	return 9;
                 break;
             }
         }
