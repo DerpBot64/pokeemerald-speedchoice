@@ -1,10 +1,17 @@
 # Pokémon Emerald Speedchoice Edition
 
-### Version Derpbot 64.0.0
+### Version Derpbot 64.0.1
 
 Updates on top of main repository version 1.2.1 below.
 
 See [**Here**](https://github.com/DerpBot64/UPR-Speedchoice) for randomizer compatible with this fork.
+
+## Bugfixes:
+
+- Fixed a bug with the non-meme fishing setting that made it always give the first encounter slot for the route with any rod.
+- Improved dev mode
+
+### Version Derpbot 64.0.0
 
 ## Bugfixes:
 - Fixed a bug in the randomizer config that caused TM move choices to be partially duplicated and override earlier TMs, replacing set ones like Sweet Scent.
