@@ -37,6 +37,8 @@
 #include "window.h"
 #include "mystery_gift.h"
 #include "done_button.h"
+#include "constants/speedchoice.h"
+#include "speedchoice.h"
 
 /*
  * Main menu state machine
@@ -537,6 +539,24 @@ static void CB2_MainMenu(void)
     UpdatePaletteFade();
 }
 
+const u8 gSpeedchoiceCurrentV[] = _("v" SPEEDCHOICE_VERSION);
+
+static void PrintSpeedchoiceVersion(u8 windowId)
+{
+    s32 width = GetStringWidth(SPEEDCHOICE_FONT_ID, gSpeedchoiceCurrentV, GetFontAttribute(SPEEDCHOICE_FONT_ID, FONTATTR_LETTER_SPACING));
+#if DEVMODE
+    {
+    	const u8 gSpeedchoiceTextDEV[]   = _(" DEV");
+
+		s32 width2 = GetStringWidth(windowId,gSpeedchoiceTextDEV, GetFontAttribute(SPEEDCHOICE_FONT_ID, FONTATTR_LETTER_SPACING));
+
+		width = width + width2;
+		AddTextPrinterParameterized3(windowId, SPEEDCHOICE_FONT_ID, 204 - width2, 1, sTextColor_Headers, -1, gSpeedchoiceTextDEV);
+    }
+#endif //DEVMODE
+    AddTextPrinterParameterized3(windowId, SPEEDCHOICE_FONT_ID, 204 - width, 1, sTextColor_Headers, -1, gSpeedchoiceCurrentV);
+}
+
 static void VBlankCB_MainMenu(void)
 {
     LoadOam();
@@ -785,6 +805,7 @@ static void Task_DisplayMainMenu(u8 taskId)
                 FillWindowPixelBuffer(1, PIXEL_FILL(0xA));
                 AddTextPrinterParameterized3(0, 1, 0, 1, sTextColor_Headers, -1, gText_MainMenuNewGame);
                 AddTextPrinterParameterized3(1, 1, 0, 1, sTextColor_Headers, -1, gText_MainMenuOption);
+                PrintSpeedchoiceVersion(0);
                 PutWindowTilemap(0);
                 PutWindowTilemap(1);
                 CopyWindowToVram(0, 2);
@@ -799,6 +820,7 @@ static void Task_DisplayMainMenu(u8 taskId)
                 AddTextPrinterParameterized3(2, 1, 0, 1, sTextColor_Headers, -1, gText_MainMenuContinue);
                 AddTextPrinterParameterized3(3, 1, 0, 1, sTextColor_Headers, -1, gText_MainMenuNewGame);
                 AddTextPrinterParameterized3(4, 1, 0, 1, sTextColor_Headers, -1, gText_MainMenuOption);
+                PrintSpeedchoiceVersion(2);
                 MainMenu_FormatSavegameText();
                 PutWindowTilemap(2);
                 PutWindowTilemap(3);
@@ -819,6 +841,7 @@ static void Task_DisplayMainMenu(u8 taskId)
                 AddTextPrinterParameterized3(3, 1, 0, 1, sTextColor_Headers, -1, gText_MainMenuNewGame);
                 AddTextPrinterParameterized3(4, 1, 0, 1, sTextColor_Headers, -1, gText_MainMenuMysteryGift);
                 AddTextPrinterParameterized3(5, 1, 0, 1, sTextColor_Headers, -1, gText_MainMenuOption);
+                PrintSpeedchoiceVersion(2);
                 MainMenu_FormatSavegameText();
                 PutWindowTilemap(2);
                 PutWindowTilemap(3);
@@ -844,6 +867,7 @@ static void Task_DisplayMainMenu(u8 taskId)
                 AddTextPrinterParameterized3(4, 1, 0, 1, sTextColor_Headers, -1, gText_MainMenuMysteryGift2);
                 AddTextPrinterParameterized3(5, 1, 0, 1, sTextColor_Headers, -1, gText_MainMenuMysteryEvents);
                 AddTextPrinterParameterized3(6, 1, 0, 1, sTextColor_Headers, -1, gText_MainMenuOption);
+                PrintSpeedchoiceVersion(2);
                 MainMenu_FormatSavegameText();
                 PutWindowTilemap(2);
                 PutWindowTilemap(3);

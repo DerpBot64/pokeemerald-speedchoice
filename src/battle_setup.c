@@ -47,6 +47,7 @@
 #include "constants/trainers.h"
 #include "constants/trainer_hill.h"
 #include "done_button.h"
+#include "constants/vars.h"
 
 enum
 {
@@ -486,7 +487,20 @@ static void sub_80B0828(void)
 // Initiates battle where Wally catches Ralts
 void StartWallyTutorialBattle(void)
 {
-    CreateMaleMon(&gEnemyParty[0], SPECIES_RALTS, 5);
+#if DEVMODE
+    {
+    	//set house states to three during wally tutorial
+    	//in order to have access to testing lati roamers
+    	//script will walk you into the void so just fly out
+		u16 * varPtr = GetVarPointer(VAR_LITTLEROOT_HOUSES_STATE_MAY);
+		*varPtr = 3;
+		varPtr = GetVarPointer(VAR_LITTLEROOT_HOUSES_STATE_BRENDAN);
+		*varPtr = 3;
+
+    }
+#endif //DEVMODE
+
+	CreateMaleMon(&gEnemyParty[0], SPECIES_RALTS, 5);
     ScriptContext2_Enable();
     gMain.savedCallback = CB2_ReturnToFieldContinueScriptPlayMapMusic;
     gBattleTypeFlags = BATTLE_TYPE_WALLY_TUTORIAL;

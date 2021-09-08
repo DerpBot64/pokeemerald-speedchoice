@@ -3821,7 +3821,15 @@ static void DisplayCantUseSurfMessage(void)
 
 static bool8 SetUpFieldMove_Fly(void)
 {
-    if (Overworld_MapTypeAllowsTeleportAndFly(gMapHeader.mapType) == TRUE)
+
+	#if DEVMODE
+    {
+    	return TRUE;
+
+    }
+	#endif //DEVMODE
+
+	if (Overworld_MapTypeAllowsTeleportAndFly(gMapHeader.mapType) == TRUE)
         return TRUE;
     else
         return FALSE;

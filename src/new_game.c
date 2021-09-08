@@ -50,6 +50,7 @@
 #include "done_button.h"
 #include "constants/moves.h"
 #include "malloc.h"
+#include "pokedex.h"
 
 extern const u8 EventScript_ResetAllMapFlags[];
 
@@ -239,7 +240,7 @@ void NewGameInitData(void)
 
 #if DEVMODE
     {
-
+		u16 i;
 		struct Pokemon *mon = (void*) AllocZeroed(sizeof(struct Pokemon));
 
         if (mon != NULL)
@@ -249,9 +250,9 @@ void NewGameInitData(void)
             pid = Random32();
             CreateMon(mon, SPECIES_MEWTWO, 100, 31, TRUE, pid, OT_ID_PLAYER_ID, 0);
             SetMonMoveSlot(mon, MOVE_PSYCHIC, 0);
-            SetMonMoveSlot(mon, MOVE_FLY, 1);
-            SetMonMoveSlot(mon, MOVE_SURF, 2);
-            SetMonMoveSlot(mon, MOVE_CUT, 3);
+			SetMonMoveSlot(mon, MOVE_FLY, 1);
+			SetMonMoveSlot(mon, MOVE_SURF, 2);
+			SetMonMoveSlot(mon, MOVE_THUNDERBOLT, 3);
             GiveMonToPlayer(mon);
             Free(mon);
         }
@@ -282,6 +283,22 @@ void NewGameInitData(void)
         FlagSet(FLAG_BADGE08_GET);
 
 		SetMoney(&gSaveBlock1Ptr->money, 999999);
+
+		AddBagItem(ITEM_PP_MAX,99);
+		AddBagItem(ITEM_MAX_ELIXIR,99);
+
+		for(i = 0; i <50; i++){
+			AddBagItem(ITEM_TM01+i,99);
+		}
+
+		for(i = 0; i <8; i++){
+			AddBagItem(ITEM_HM01+i,1);
+		}
+
+		for(i = 1; i <387; i++){
+			GetSetPokedexFlag(i, FLAG_SET_SEEN);
+		}
+
     }
 #endif //DEVMODE
 
