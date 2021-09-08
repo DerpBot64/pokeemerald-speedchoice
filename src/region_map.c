@@ -716,6 +716,14 @@ static u8 MoveRegionMapCursor_Full(void)
     }
 
     mapSecId = GetMapSecIdAt(gRegionMap->cursorPosX, gRegionMap->cursorPosY);
+
+    //fix every blank area showing up as ancient cave.
+    //don't know why it isn't working right, probably a constant
+    //or something in sRegionMap_MapSectionLayout is wrong
+    if(mapSecId == MAPSEC_ANCIENT_CAVE){
+    	mapSecId =MAPSEC_NONE;
+    }
+
     gRegionMap->mapSecType = GetMapsecType(mapSecId);
     if (mapSecId != gRegionMap->mapSecId)
     {
@@ -789,6 +797,14 @@ static u8 MoveRegionMapCursor_Zoomed(void)
             gRegionMap->zoomedCursorPosX = x;
             gRegionMap->zoomedCursorPosY = y;
             mapSecId = GetMapSecIdAt(x, y);
+
+            //fix every blank area showing up as ancient cave.
+			//don't know why it isn't working right, probably a constant
+			//or something in sRegionMap_MapSectionLayout is wrong
+			if(mapSecId == MAPSEC_ANCIENT_CAVE){
+				mapSecId =MAPSEC_NONE;
+			}
+
             gRegionMap->mapSecType = GetMapsecType(mapSecId);
             if (mapSecId != gRegionMap->mapSecId)
             {
