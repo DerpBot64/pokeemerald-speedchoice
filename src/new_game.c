@@ -281,6 +281,7 @@ void NewGameInitData(void)
         FlagSet(FLAG_BADGE06_GET);
         FlagSet(FLAG_BADGE07_GET);
         FlagSet(FLAG_BADGE08_GET);
+        FlagSet(FLAG_LANDMARK_POKEMON_LEAGUE);
 
 		SetMoney(&gSaveBlock1Ptr->money, 999999);
 
