@@ -47,12 +47,12 @@ Route111_EventScript_ShowTemporaryMirageTower:: @ 81F0CE4
 
 Route111_OnTransition: @ 81F0D87
 	setvar VAR_TRAINER_HILL_IS_ACTIVE, 0
-	special SetMirageTowerVisibility
-	call_if_unset FLAG_MIRAGE_TOWER_VISIBLE, Route111_EventScript_SetLayoutNoMirageTower
 	compare VAR_MIRAGE_TOWER_STATE, 1
 	call_if_eq Route111_EventScript_SetFallingPlayerGfx
 	compare VAR_MIRAGE_TOWER_STATE, 2
 	call_if_eq Route111_EventScript_SetMirageTowerGone
+	special SetMirageTowerVisibility
+	call_if_unset FLAG_MIRAGE_TOWER_VISIBLE, Route111_EventScript_SetLayoutNoMirageTower
 	call Route111_EventScript_CheckSetSandstorm
 	call GabbyAndTy_EventScript_UpdateLocation
 	goto_if_not_defeated TRAINER_VICKY, Route111_EventScript_SetWinstratesNotDefeated
@@ -106,7 +106,7 @@ Route111_EventScript_SetLayoutNoMirageTower:: @ 81F0E3C
 	return
 
 Route111_EventScript_SetMirageTowerGone:: @ 81F0E40
-	setvar VAR_MIRAGE_TOWER_STATE, 3
+	setvar VAR_MIRAGE_TOWER_STATE, 0 @ will re-appear when area is reloaded
 	return
 
 Route111_OnWarp: @ 81F0E46
