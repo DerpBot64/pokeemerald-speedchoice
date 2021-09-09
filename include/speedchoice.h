@@ -439,5 +439,6 @@ extern u32 gRandomizerCheckValue;
 // ----------------------
 void CB2_InitSpeedchoiceMenu(void);
 bool8 CheckSpeedchoiceOption(u8, u8);
+u32 CalculateCheckValue(void);
 
 #endif // _GUARD_SPEEDCHOICE_H

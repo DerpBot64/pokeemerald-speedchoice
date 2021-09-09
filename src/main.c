@@ -24,6 +24,7 @@
 #include "main.h"
 #include "trainer_hill.h"
 #include "done_button.h"
+#include "speedchoice.h"
 
 static void VBlankIntr(void);
 static void HBlankIntr(void);
@@ -220,6 +221,14 @@ void StartTimer1(void)
 void SeedRngAndSetTrainerId(void)
 {
     u16 val = REG_TM1CNT_L;
+    //seed rng and trainer id with check value as well
+    //not sure when or why this register broke, but it was
+    //generating a trainer id of 00000 every time
+    //secret id was generating, but trainer id was the leading digits
+    //and not randomizing properly
+    u32 cv = CalculateCheckValue();
+	val ^= cv;
+	val ^= cv >> 16;
     SeedRng(val);
     REG_TM1CNT_H = 0;
     gTrainerId = val;

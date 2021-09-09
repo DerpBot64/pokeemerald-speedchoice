@@ -1313,7 +1313,7 @@ u8 GetNumBitsUsed(u8 numOptions)
 
 // Calculate the Check Value given a given option configuration. Used for verifying ROM
 // check value + option config before starting a run/race.
-u32 CalculateCheckValue(u8 taskId)
+u32 CalculateCheckValue(void)
 {
     u32 checkValue;
     u8 i; // current option
@@ -1462,7 +1462,7 @@ static void Task_AskToStartGame(u8 taskId)
  */
 static void Task_SpeedchoiceMenuSave(u8 taskId)
 {
-    ConvertIntToHexStringN(gStringVar1, CalculateCheckValue(taskId), STR_CONV_MODE_LEADING_ZEROS, 8);
+    ConvertIntToHexStringN(gStringVar1, CalculateCheckValue(), STR_CONV_MODE_LEADING_ZEROS, 8);
     StringExpandPlaceholders(gStringVar4, gSpeedchoiceStartGameText);
     DrawTooltip(taskId, gStringVar4, TEXT_SPEED_FF, TRUE); // a bit of a hack, but whatever.
     CreateYesNoMenu(&sSpeedchoiceMenuWinTemplates[SPD_WIN_YESNO], 418, 2, 0);

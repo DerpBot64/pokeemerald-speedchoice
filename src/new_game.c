@@ -93,7 +93,7 @@ void CopyTrainerId(u8 *dst, u8 *src)
 
 static void InitPlayerTrainerId(void)
 {
-    u32 trainerId = (Random() << 0x10) | GetGeneratedTrainerIdLower();
+    u32 trainerId = (Random() << 0x16) | GetGeneratedTrainerIdLower();
     SetTrainerId(trainerId, gSaveBlock2Ptr->playerTrainerId);
 }
 
@@ -175,6 +175,10 @@ void NewGameInitData(void)
 {
     if (gSaveFileStatus == SAVE_STATUS_EMPTY || gSaveFileStatus == SAVE_STATUS_CORRUPT)
         RtcReset();
+
+    //done at the end of the naming screen in birch intro normally,
+    //skipped due to speedchoice changes so added here.
+    SeedRngAndSetTrainerId();
 
     gDifferentSaveFile = 1;
     gSaveBlock2Ptr->encryptionKey = 0;
