@@ -1042,11 +1042,18 @@ void DoneButtonCB(void)
         gMain.state++;
     case 9:
         DrawDoneButtonFrame();
-        gLocalFrameTimers.totalFrames = GetDoneButtonStat(DB_FRAME_COUNT_TOTAL) + gFrameTimers.frameCount;
-        gLocalFrameTimers.totalFramesOw = GetDoneButtonStat(DB_FRAME_COUNT_OW) + gFrameTimers.owFrameCount;
-        gLocalFrameTimers.totalFramesBattle = GetDoneButtonStat(DB_FRAME_COUNT_BATTLE) + gFrameTimers.battleFrameCount;
-        gLocalFrameTimers.totalFramesMenu = GetDoneButtonStat(DB_FRAME_COUNT_MENU) + gFrameTimers.menuFrameCount;
-        gLocalFrameTimers.totalFramesIntro = GetDoneButtonStat(DB_FRAME_COUNT_INTROS) + gFrameTimers.introsFrameCount;
+        //remove double count of done button time. Frames from earlier saves already counted on
+        //save load into gFrameTimers.
+        //gLocalFrameTimers.totalFrames = GetDoneButtonStat(DB_FRAME_COUNT_TOTAL) + gFrameTimers.frameCount;
+        //gLocalFrameTimers.totalFramesOw = GetDoneButtonStat(DB_FRAME_COUNT_OW) + gFrameTimers.owFrameCount;
+        //gLocalFrameTimers.totalFramesBattle = GetDoneButtonStat(DB_FRAME_COUNT_BATTLE) + gFrameTimers.battleFrameCount;
+        //gLocalFrameTimers.totalFramesMenu = GetDoneButtonStat(DB_FRAME_COUNT_MENU) + gFrameTimers.menuFrameCount;
+        //gLocalFrameTimers.totalFramesIntro = GetDoneButtonStat(DB_FRAME_COUNT_INTROS) + gFrameTimers.introsFrameCount;
+        gLocalFrameTimers.totalFrames = gFrameTimers.frameCount;
+        gLocalFrameTimers.totalFramesOw = gFrameTimers.owFrameCount;
+        gLocalFrameTimers.totalFramesBattle = gFrameTimers.battleFrameCount;
+        gLocalFrameTimers.totalFramesMenu = gFrameTimers.menuFrameCount;
+        gLocalFrameTimers.totalFramesIntro = gFrameTimers.introsFrameCount;
         gMain.state++;
         break;
     case 10:
