@@ -16,12 +16,15 @@
 #include "overworld.h"
 #include "text_window.h"
 #include "string_util.h"
+#include "pokemon_storage_system.h"
 
 struct DoneButton
 {
     MainCallback doneCallback;
     u8 taskId;
     u8 page;
+    s8 slotID;
+    s8 boxID;
     u16 tilemapBuffer[0x800];
 };
 
@@ -42,12 +45,18 @@ EWRAM_DATA bool8 sInIntro = FALSE;
 EWRAM_DATA struct FrameTimers gFrameTimers = {0};
 
 
-static EWRAM_DATA struct DoneButton *doneButton = NULL;
+static EWRAM_DATA struct DoneButton* doneButton = NULL;
+static EWRAM_DATA struct BoxSlotCombo* boxSlotCombo = NULL;
 
 static void DoneButtonCB(void);
 static void PrintGameStatsPage(void);
 static void Task_DoneButton(u8 taskId);
 static void Task_DestroyDoneButton(u8 taskId);
+
+static void getPrevPartySlot();
+static void getNextPartySlot();
+static void getPrevBoxSlot();
+static void getNextBoxSlot();
 
 void OpenDoneButton(MainCallback doneCallback);
 void DrawDoneButtonFrame(void);
@@ -671,6 +680,18 @@ const u8 gMiscEvosAttempted[] = _("{COLOR GREEN}{SHADOW LIGHT_GREEN}EVOS ATTEMPT
 const u8 gMiscEvosCompleted[] = _("{COLOR GREEN}{SHADOW LIGHT_GREEN}EVOS COMPLETED: ");
 const u8 gMiscEvosCancelled[] = _("{COLOR GREEN}{SHADOW LIGHT_GREEN}EVOS CANCELLED: ");
 
+// Page 9
+const u8 gPokemonStatsPageHeader[] = _("{COLOR GREEN}{SHADOW LIGHT_GREEN}POKEMON STATS ");
+const u8 gHPStats[] = _("{COLOR GREEN}{SHADOW LIGHT_GREEN}HP IVS (EVS): ");
+const u8 gATKStats[] = _("{COLOR GREEN}{SHADOW LIGHT_GREEN}ATTACK IVS (EVS): ");
+const u8 gDEFStats[] = _("{COLOR GREEN}{SHADOW LIGHT_GREEN}DEFENSE IVS (EVS): ");
+const u8 gSPAStats[] = _("{COLOR GREEN}{SHADOW LIGHT_GREEN}SP. ATTACK IVS (EVS): ");
+const u8 gSDFStats[] = _("{COLOR GREEN}{SHADOW LIGHT_GREEN}SP. DEFENSE IVS (EVS): ");
+const u8 gSPEStats[] = _("{COLOR GREEN}{SHADOW LIGHT_GREEN}SPEED IVS (EVS): ");
+
+const u8 gPokemonStatsPartySlot[] = _("{COLOR GREEN}{SHADOW LIGHT_GREEN}PARTY SLOT {STR_VAR_1}:");
+const u8 gPokemonStatsBoxSlot[] = _("{COLOR GREEN}{SHADOW LIGHT_GREEN}BOX {STR_VAR_1} SLOT {STR_VAR_2}:");
+
 const u8 gPageText[] = _("{COLOR GREEN}{SHADOW LIGHT_GREEN}{LEFT_ARROW} PAGE {STR_VAR_1} {RIGHT_ARROW}");
 
 #define CHAR_0 0xA1
@@ -855,7 +876,7 @@ const struct DoneButtonLineItem sLineItems[8][7] = {
     }
 };
 
-#define NPAGES (NELEMS(sLineItems))
+#define NPAGES (NELEMS(sLineItems)+1)
 
 static const struct BgTemplate sSpeedchoiceDoneButtonTemplates[3] =
 {
@@ -928,6 +949,8 @@ void OpenDoneButton(MainCallback doneCallback)
         doneButton->doneCallback = doneCallback;
         doneButton->taskId = 0xFF;
         doneButton->page = 0;
+        doneButton->slotID = 0;
+        doneButton->boxID = 0;
         SetMainCallback2(DoneButtonCB);
     }
 }
@@ -1097,6 +1120,35 @@ static void Task_DoneButton(u8 taskId)
             data->page--;
         PrintGameStatsPage();
     }
+    else if (JOY_NEW(DPAD_UP))
+	{
+		if (data->page == 8){
+			PlaySE(SE_SELECT);
+			if(data->boxID == 0){
+				getPrevPartySlot();
+			}
+			else{
+				getPrevBoxSlot();
+			}
+
+			PrintGameStatsPage();
+		}
+	}
+    else if (JOY_NEW(DPAD_DOWN))
+	{
+		if (data->page == 8){
+			PlaySE(SE_SELECT);
+
+			if(data->boxID == 0){
+				getNextPartySlot();
+			}
+			else{
+				getNextBoxSlot();
+			}
+
+			PrintGameStatsPage();
+		}
+	}
     else if (JOY_NEW(A_BUTTON | B_BUTTON | START_BUTTON))
     {
         PlaySE(SE_SELECT);
@@ -1119,8 +1171,8 @@ static void Task_DestroyDoneButton(u8 taskId)
 // it doesnt seem centered right. subtract 8 pixels to compensate for these functions
 void PrintPageHeader(const struct DoneButtonLineItem *item)
 {
-    s32 width = GetStringWidth(0, item->name, 0);
-    s32 centered_x = ((29 * 8) - (1 * 8) - width) / 2;
+    s32 width = GetStringWidth(1, item->name, 0);
+    s32 centered_x = (240 - width) / 2;
 
     AddTextPrinterParameterized(0, 1, item->name, centered_x - 8, 1, -1, NULL);
 }
@@ -1132,10 +1184,206 @@ void PrintPageString(void)
 
     ConvertIntToDecimalStringN(gStringVar1, data->page + 1, STR_CONV_MODE_RIGHT_ALIGN, 1);
     StringExpandPlaceholders(gStringVar4, gPageText);
-    width = GetStringWidth(0, gStringVar4, 0);
+    width = GetStringWidth(1, gStringVar4, 0);
     centered_x = (240 - width) / 2;
 
     AddTextPrinterParameterized(0, 1, gStringVar4, centered_x - 8, 128, -1, NULL);
+}
+
+struct DoneButtonPokemonStatsItem
+{
+    const u8 * name;
+    const u8 IV;
+    const u8 EV;
+};
+
+const struct DoneButtonPokemonStatsItem sPokemonStatsItems[6] = {
+		{gHPStats, MON_DATA_HP_IV, MON_DATA_HP_EV},
+        {gATKStats, MON_DATA_ATK_IV, MON_DATA_ATK_EV},
+        {gDEFStats, MON_DATA_DEF_IV, MON_DATA_DEF_EV},
+        {gSPAStats, MON_DATA_SPATK_IV, MON_DATA_SPATK_EV},
+        {gSDFStats, MON_DATA_SPDEF_IV, MON_DATA_SPDEF_EV},
+        {gSPEStats, MON_DATA_SPEED_IV, MON_DATA_SPEED_EV}
+    };
+
+static void PrintGameStatsPagePokemonDetails(struct BoxPokemon* mon, u32 slotLabel, u32 boxLabel){
+
+	s32 i;
+	s32 width;
+	i = 1;
+
+
+	//pokemon slot label
+	if(boxLabel == 0){
+		ConvertIntToDecimalStringN(gStringVar1, slotLabel, STR_CONV_MODE_RIGHT_ALIGN, GetNumDigits(slotLabel));
+		StringExpandPlaceholders(gStringVar4, gPokemonStatsPartySlot);
+	}
+	else{
+		ConvertIntToDecimalStringN(gStringVar1, boxLabel, STR_CONV_MODE_RIGHT_ALIGN, GetNumDigits(boxLabel));
+		ConvertIntToDecimalStringN(gStringVar2, slotLabel, STR_CONV_MODE_RIGHT_ALIGN, GetNumDigits(slotLabel));
+		StringExpandPlaceholders(gStringVar4, gPokemonStatsBoxSlot);
+	}
+	AddTextPrinterParameterized(0, 1, gStringVar4, 1, 16 * i + 1, -1, NULL);
+
+	//nickname print
+	GetBoxMonData(mon, MON_DATA_NICKNAME, gStringVar1);
+	StringExpandPlaceholders(gStringVar4, gBufferedString4);
+	width = GetStringWidth(1, gStringVar4, 0);
+	AddTextPrinterParameterized(0, 1, gStringVar4, 220 - width, 16 * i + 1, -1, NULL);
+
+	//stats rows
+	for (i = 2; i < 8; i++){
+
+		AddTextPrinterParameterized(0, 1, sPokemonStatsItems[i-2].name, 1, 16 * i + 1, -1, NULL);
+		ConvertIntToDecimalStringN(gStringVar1, GetBoxMonData(mon,sPokemonStatsItems[i-2].IV), STR_CONV_MODE_RIGHT_ALIGN, GetNumDigits(GetBoxMonData(mon,sPokemonStatsItems[i-2].IV)));
+		ConvertIntToDecimalStringN(gStringVar2, GetBoxMonData(mon,sPokemonStatsItems[i-2].EV), STR_CONV_MODE_RIGHT_ALIGN, GetNumDigits(GetBoxMonData(mon,sPokemonStatsItems[i-2].EV)));
+		StringExpandPlaceholders(gStringVar4, gBufferedString5);
+
+		width = GetStringWidth(1, gStringVar4, 0);
+		AddTextPrinterParameterized(0, 1, gStringVar4, 220 - width, 16 * i + 1, -1, NULL);
+	}
+
+}
+
+static void handlePartyStatsPage(s8 slotID, s8 boxID){
+	s32 width;
+	s32 centered_x;
+	//header
+	width = GetStringWidth(1, gPokemonStatsPageHeader, 0);
+	centered_x = (240 - width) / 2;
+	AddTextPrinterParameterized(0, 1, gPokemonStatsPageHeader, centered_x - 8, 1, -1, NULL);
+
+	//skip if we have no pokemon yet
+	if(GetMonData(&gPlayerParty[0],MON_DATA_SPECIES) == SPECIES_NONE){
+		return;
+	}
+
+	if(boxID == 0){
+		PrintGameStatsPagePokemonDetails(&gPlayerParty[slotID].box, slotID+1, 0);
+	}
+	else{
+		PrintGameStatsPagePokemonDetails(&gPokemonStoragePtr->boxes[boxID-1][slotID], slotID+1, boxID);
+	}
+
+}
+
+static void getPrevPartySlot(){
+	s32 i;
+	struct DoneButton* currentPosition = doneButton;
+
+	//skip if we have no pokemon yet
+	if(GetMonData(&gPlayerParty[0],MON_DATA_SPECIES) == SPECIES_NONE){
+		return;
+	}
+
+	if(currentPosition->slotID == 0){
+		currentPosition->boxID = 14;
+		currentPosition->slotID = 30;
+		getPrevBoxSlot();
+		return;
+	}
+	else{
+		currentPosition->slotID = currentPosition->slotID-1;
+		return;
+	}
+}
+
+static void getNextPartySlot(){
+
+	struct DoneButton* currentPosition = doneButton;
+
+	//skip if we have no pokemon yet
+	if(GetMonData(&gPlayerParty[0],MON_DATA_SPECIES) == SPECIES_NONE){
+		return;
+	}
+
+	if(currentPosition->slotID == 5){
+		currentPosition->boxID = 1;
+		currentPosition->slotID = -1;
+		getNextBoxSlot();
+		return;
+	}
+	else{
+		if( GetMonData(&gPlayerParty[currentPosition->slotID+1],MON_DATA_SPECIES) == SPECIES_NONE){
+			currentPosition->boxID = 1;
+			currentPosition->slotID = -1;
+			getNextBoxSlot();
+			return;
+		}
+
+		currentPosition->slotID = currentPosition->slotID+1;
+		return;
+	}
+}
+
+static void getNextBoxSlot(){
+
+	s32 i;
+	struct DoneButton* currentPosition = doneButton;
+
+	//skip if we have no pokemon yet
+	if(GetMonData(&gPlayerParty[0],MON_DATA_SPECIES) == SPECIES_NONE){
+		return;
+	}
+
+	for(i = currentPosition->slotID+1; i <30; i++){
+		if(GetBoxMonData(&gPokemonStoragePtr->boxes[currentPosition->boxID-1][i], MON_DATA_SPECIES) != SPECIES_NONE){
+			currentPosition->slotID = i;
+			return;
+		}
+	}
+
+	if(currentPosition->boxID == 14){
+		//return first party slot
+		currentPosition->boxID = 0;
+		currentPosition->slotID = 0;
+		return;
+	}
+
+	currentPosition->boxID = currentPosition->boxID+1;
+	currentPosition->slotID = -1;
+
+	getNextBoxSlot();
+	return;
+}
+
+static void getPrevBoxSlot(){
+	s32 i;
+	struct DoneButton* currentPosition = doneButton;
+
+	//skip if we have no pokemon yet
+	if(GetMonData(&gPlayerParty[0],MON_DATA_SPECIES) == SPECIES_NONE){
+		return;
+	}
+
+	for(i = currentPosition->slotID-1; i >=0; i--){
+		if(GetBoxMonData(&gPokemonStoragePtr->boxes[currentPosition->boxID-1][i], MON_DATA_SPECIES) != SPECIES_NONE){
+			currentPosition->slotID = i;
+			return;
+		}
+	}
+
+	if(currentPosition->boxID == 1){
+		//return party slot highest
+		currentPosition->boxID = 0;
+
+		for(i = 5; i >=0; i--){
+			if(GetMonData(&gPlayerParty[i],MON_DATA_SPECIES) != SPECIES_NONE){
+				currentPosition->slotID = i;
+				return;
+			}
+		}
+		//how did we get here
+		//no pokemon in party at all
+		currentPosition->slotID=0;
+		return;
+	}
+
+	currentPosition->boxID = currentPosition->boxID-1;
+	currentPosition->slotID = 30;
+
+	getPrevBoxSlot();
+	return;
 }
 
 static void PrintGameStatsPage(void)
@@ -1144,35 +1392,39 @@ static void PrintGameStatsPage(void)
     s32 i;
 
     FillWindowPixelBuffer(0, PIXEL_FILL(1));
-    for (i = 0; i < 7; i++)
-    {
-        s32 width;
-        const char * value_s;
-        if(i == 0 && items[i].name) // this is the header. special treatment
-            PrintPageHeader(&items[i]);
-        else
-        {
-            if (items[i].name != NULL)
-            {
-                AddTextPrinterParameterized(0, 1, items[i].name, 1, 18 * i + 1, -1, NULL);
-            }
-            if (items[i].printfn != NULL)
-            {
-                value_s = items[i].printfn(items[i].stat, items[i].stat2);
-            }
-            else
-            {
-                value_s = gTODOString;
-            }
-            width = GetStringWidth(0, value_s, 0);
-            if (items[i].name != NULL)
-            {
-                if(doneButton->page + 1 == 1) // timer spacing handling
-                    AddTextPrinterParameterized(0, 1, value_s, 224 - width, 18 * i + 1, -1, NULL);
-                else
-                    AddTextPrinterParameterized(0, 1, value_s, 200 - width, 18 * i + 1, -1, NULL);
-            }
-        }
+
+    if(doneButton->page == 8){
+    	handlePartyStatsPage(doneButton->slotID, doneButton->boxID);
+    }
+    else{
+		for (i = 0; i < 7; i++)
+		{
+			s32 width;
+			const char * value_s;
+			if(i == 0 && items[i].name) // this is the header. special treatment
+				PrintPageHeader(&items[i]);
+
+			else
+			{
+				if (items[i].name != NULL)
+				{
+					AddTextPrinterParameterized(0, 1, items[i].name, 1, 18 * i + 1, -1, NULL);
+				}
+				if (items[i].printfn != NULL)
+				{
+					value_s = items[i].printfn(items[i].stat, items[i].stat2);
+				}
+				else
+				{
+					value_s = gTODOString;
+				}
+				width = GetStringWidth(1, value_s, 0);
+				if (items[i].name != NULL)
+				{
+					AddTextPrinterParameterized(0, 1, value_s, 220 - width, 18 * i + 1, -1, NULL);
+				}
+			}
+		}
     }
     PrintPageString();
     PutWindowTilemap(0);
