@@ -46,7 +46,6 @@ EWRAM_DATA struct FrameTimers gFrameTimers = {0};
 
 
 static EWRAM_DATA struct DoneButton* doneButton = NULL;
-static EWRAM_DATA struct BoxSlotCombo* boxSlotCombo = NULL;
 
 static void DoneButtonCB(void);
 static void PrintGameStatsPage(void);
