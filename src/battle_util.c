@@ -585,6 +585,7 @@ void HandleAction_SafariZoneRun(void)
     gBattlerAttacker = gBattlerByTurnOrder[gCurrentTurnActionNumber];
     PlaySE(SE_FLEE);
     gCurrentTurnActionNumber = gBattlersCount;
+    TryIncrementButtonStat(DB_BATTLES_FLED);
     gBattleOutcome = B_OUTCOME_RAN;
 }
 
