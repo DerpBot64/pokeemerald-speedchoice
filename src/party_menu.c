@@ -4831,7 +4831,6 @@ static void DisplayPartyMenuForgotMoveMessage(u8 taskId)
     GetMonNickname(mon, gStringVar1);
     StringCopy(gStringVar2, gMoveNames[move]);
     DisplayLearnMoveMessage(gText_12PoofForgotMove);
-    TryIncrementButtonStat(DB_MOVES_LEARNT);
     gTasks[taskId].func = Task_PartyMenuReplaceMove;
 }
 

@@ -660,6 +660,9 @@ const u8 gBattle3OHKOs[] = _("{COLOR GREEN}{SHADOW LIGHT_GREEN}OHKOs: ");
 const u8 gBattle4Header[] = _("{COLOR GREEN}{SHADOW LIGHT_GREEN}PLAYER STATS (BATTLE 4)");
 const u8 gBattle4DamageDealt[] = _("{COLOR GREEN}{SHADOW LIGHT_GREEN}DAMAGE DEALT: ");
 const u8 gBattle4DamageTaken[] = _("{COLOR GREEN}{SHADOW LIGHT_GREEN}DAMAGE TAKEN: ");
+const u8 gBattle4DamageHealed[] = _("{COLOR GREEN}{SHADOW LIGHT_GREEN}PLAYER DAMAGE HEALED: ");
+const u8 gBattle4EnemyDamageHealed[] = _("{COLOR GREEN}{SHADOW LIGHT_GREEN}ENEMY DAMAGE HEALED: ");
+const u8 gBattle4MovesLearnt[] = _("{COLOR GREEN}{SHADOW LIGHT_GREEN}MOVES LEARNT: ");
 
 // PAGE 7
 const u8 gMoneyItemsHeader[] = _("{COLOR GREEN}{SHADOW LIGHT_GREEN}PLAYER STATS (MONEY & ITEMS)");
@@ -850,10 +853,10 @@ const struct DoneButtonLineItem sLineItems[8][7] = {
         {gBattle4Header, NULL},
         {gBattle4DamageDealt, GetStandardDoubleButtonStat, DB_TOTAL_DAMAGE_DEALT, DB_ACTUAL_DAMAGE_DEALT}, // Total (Actual)
         {gBattle4DamageTaken, GetStandardDoubleButtonStat, DB_TOTAL_DAMAGE_TAKEN, DB_ACTUAL_DAMAGE_TAKEN}, // Total (Actual)
-        {NULL, NULL},
-        {NULL, NULL},
-        {NULL, NULL},
-        {NULL, NULL}
+		{gBattle4DamageHealed, GetStandardButtonStat, DB_PLAYER_HP_HEALED},
+		{gBattle4EnemyDamageHealed, GetStandardButtonStat, DB_ENEMY_HP_HEALED},
+		{gBattle4MovesLearnt, GetStandardButtonStat, DB_MOVES_LEARNT},
+		{NULL, NULL}
     },
     { // PAGE 7 (TODO)
         {gMoneyItemsHeader, NULL},
