@@ -503,7 +503,10 @@ PlayersHouse_1F_EventScript_GetSSTicketAndSeeLatiTV:: @ 8292AF2
 	msgbox PlayersHouse_1F_Text_WhatColorDidTheySay, MSGBOX_DEFAULT
 	multichoice 22, 8, MULTI_TV_LATI, 1
 	copyvar VAR_0x8004, VAR_RESULT
-	special InitRoamer
+	compare VAR_0x8004, FALSE
+	call_if_eq PlayersHouse_1F_EventScript_Set_Latias
+	compare VAR_0x8004, TRUE
+	call_if_eq PlayersHouse_1F_EventScript_Set_Latios
 	copyvar VAR_ROAMER_POKEMON, VAR_RESULT
 	msgbox PlayersHouse_1F_Text_StillUnknownPokemon, MSGBOX_DEFAULT
 	closemessage
@@ -511,6 +514,18 @@ PlayersHouse_1F_EventScript_GetSSTicketAndSeeLatiTV:: @ 8292AF2
 	setvar VAR_LITTLEROOT_HOUSES_STATE_BRENDAN, 4
 	releaseall
 	end
+
+PlayersHouse_1F_EventScript_Set_Latias::
+	setvar VAR_TEMP_3, SPECIES_LATIAS
+	bufferspeciesname 0, VAR_TEMP_3
+	startroamer VAR_TEMP_3
+	return
+
+PlayersHouse_1F_EventScript_Set_Latios::
+	setvar VAR_TEMP_3, SPECIES_LATIOS
+	bufferspeciesname 0, VAR_TEMP_3
+	startroamer VAR_TEMP_3
+	return
 
 @ Never called.
 PlayersHouse_1F_EventScript_AirLatiBroadcast:: @ 8292C72

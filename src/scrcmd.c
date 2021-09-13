@@ -51,6 +51,7 @@
 #include "constants/event_objects.h"
 #include "speedchoice.h"
 #include "done_button.h"
+#include "roamer.h"
 
 typedef u16 (*SpecialFunc)(void);
 typedef void (*NativeFunc)(void);
@@ -2312,5 +2313,14 @@ bool8 ScrCmd_checkspeedchoice(struct ScriptContext *ctx)
     u8 setting = ScriptReadByte(ctx);
 
     ctx->comparisonResult = CheckSpeedchoiceOption(option, setting);
+    return TRUE;
+}
+
+bool8 ScrCmd_startroamer(struct ScriptContext *ctx)
+{
+	u16 species = VarGet(ScriptReadHalfword(ctx));
+
+	InitRoamer(species);
+
     return TRUE;
 }

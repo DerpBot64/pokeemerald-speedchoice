@@ -3,7 +3,7 @@
 
 void ClearRoamerData(void);
 void ClearRoamerLocationData(void);
-void InitRoamer(void);
+void InitRoamer(u16 species);
 void UpdateLocationHistoryForRoamer(void);
 void RoamerMoveToOtherLocationSet(void);
 void RoamerMove(void);

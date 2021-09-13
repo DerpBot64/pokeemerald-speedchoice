@@ -449,4 +449,6 @@ PlayersHouse_1F_Text_WhatColorDidTheySay: @ 81F8351
 
 PlayersHouse_1F_Text_StillUnknownPokemon: @ 81F83A1
 	.string "MOM: Well, isn't that something!\n"
-	.string "There are still unknown POKéMON.$"
+	.string "There are still unknown POKéMON.\p"
+	.string "{STR_VAR_1} is now roaming\n"
+	.string "the wild.$"

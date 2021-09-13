@@ -4,6 +4,7 @@
 #include "random.h"
 #include "roamer.h"
 #include "constants/maps.h"
+#include "pokedex.h"
 
 enum
 {
@@ -59,12 +60,11 @@ void ClearRoamerLocationData(void)
     sRoamerLocation[MAP_NUM] = 0;
 }
 
-static void CreateInitialRoamerMon(bool16 createLatios)
+static void CreateInitialRoamerMon(u16 species)
 {
-    if (!createLatios)
-        (&gSaveBlock1Ptr->roamer)->species = SPECIES_LATIAS;
-    else
-        (&gSaveBlock1Ptr->roamer)->species = SPECIES_LATIOS;
+    (&gSaveBlock1Ptr->roamer)->species = species;
+
+    GetSetPokedexFlag(SpeciesToNationalPokedexNum(species),FLAG_SET_SEEN);
 
     CreateMon(&gEnemyParty[0], (&gSaveBlock1Ptr->roamer)->species, 40, 0x20, 0, 0, OT_ID_PLAYER_ID, 0);
     (&gSaveBlock1Ptr->roamer)->level = 40;
@@ -82,11 +82,11 @@ static void CreateInitialRoamerMon(bool16 createLatios)
     sRoamerLocation[MAP_NUM] = sRoamerLocations[Random() % (ARRAY_COUNT(sRoamerLocations) - 1)][0];
 }
 
-void InitRoamer(void)
+void InitRoamer(u16 species)
 {
     ClearRoamerData();
     ClearRoamerLocationData();
-    CreateInitialRoamerMon(gSpecialVar_0x8004);
+    CreateInitialRoamerMon(species);
 }
 
 void UpdateLocationHistoryForRoamer(void)

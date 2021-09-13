@@ -102,6 +102,8 @@ const struct StaticPokemon gStaticPokemon[][8] = {
 	{{"LavaridgeTown_EventScript_EggWoman", 0x48}},
 	{{"MossdeepCity_StevensHouse_EventScript_GiveBeldum", 0x3}, {"MossdeepCity_StevensHouse_EventScript_GiveBeldum", 0x6}, {"MossdeepCity_StevensHouse_EventScript_ReceivedBeldumFanfare", 0x2}, {"MossdeepCity_StevensHouse_EventScript_ReceivedBeldumFanfare", 0x13}},
     {{"Route119_WeatherInstitute_2F_EventScript_ReceiveCastform", 0xB}, {"Route119_WeatherInstitute_2F_EventScript_ReceiveCastform", 0xE}},
+	{{"PlayersHouse_1F_EventScript_Set_Latias", 0x3}},
+	{{"PlayersHouse_1F_EventScript_Set_Latios", 0x3}},
 };
 
 const struct TMText gTMTexts[] = {
