@@ -509,6 +509,10 @@ PlayersHouse_1F_EventScript_GetSSTicketAndSeeLatiTV:: @ 8292AF2
 	call_if_eq PlayersHouse_1F_EventScript_Set_Latios
 	copyvar VAR_ROAMER_POKEMON, VAR_RESULT
 	msgbox PlayersHouse_1F_Text_StillUnknownPokemon, MSGBOX_DEFAULT
+	showmonpic VAR_TEMP_3, 10, 3
+	msgbox PlayersHouse_1F_Text_ReleaseRoamer, MSGBOX_DEFAULT
+	waitbuttonpress
+	hidemonpic
 	closemessage
 	setvar VAR_LITTLEROOT_HOUSES_STATE_MAY, 4
 	setvar VAR_LITTLEROOT_HOUSES_STATE_BRENDAN, 4
