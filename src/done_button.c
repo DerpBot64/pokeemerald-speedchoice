@@ -248,13 +248,16 @@ void TryAddButtonStatBy(enum DoneButtonStat stat, u32 add)
             TRY_INC_GAME_STAT_BY(2, pokemonCaughtInBalls, add, USHRT_MAX);
             break;
         case DB_EVOLUTIONS_ATTEMPTED:
-            TRY_INC_GAME_STAT_BY(2, evosAttempted, add, UINT_MAX);
+            TRY_INC_GAME_STAT_BY(2, evosAttempted, add, USHRT_MAX);
             break;
         case DB_EVOLUTIONS_COMPLETED:
-            TRY_INC_GAME_STAT_BY(2, evosCompleted, add, UINT_MAX);
+            TRY_INC_GAME_STAT_BY(2, evosCompleted, add, USHRT_MAX);
             break;
         case DB_EVOLUTIONS_CANCELLED:
-            TRY_INC_GAME_STAT_BY(2, evosCancelled, add, UINT_MAX);
+            TRY_INC_GAME_STAT_BY(2, evosCancelled, add, USHRT_MAX);
+        case DB_SWEET_SCENTS:
+			TRY_INC_GAME_STAT_BY(2, sweetScents, add, USHRT_MAX);
+			break;
             break;
     }
 }
@@ -416,14 +419,17 @@ void TryIncrementButtonStat(enum DoneButtonStat stat)
             TRY_INC_GAME_STAT(2, pokemonCaughtInBalls, USHRT_MAX);
             break;
         case DB_EVOLUTIONS_ATTEMPTED:
-            TRY_INC_GAME_STAT(2, evosAttempted, UINT_MAX);
+            TRY_INC_GAME_STAT(2, evosAttempted, USHRT_MAX);
             break;
         case DB_EVOLUTIONS_COMPLETED:
-            TRY_INC_GAME_STAT(2, evosCompleted, UINT_MAX);
+            TRY_INC_GAME_STAT(2, evosCompleted, USHRT_MAX);
             break;
         case DB_EVOLUTIONS_CANCELLED:
-            TRY_INC_GAME_STAT(2, evosCancelled, UINT_MAX);
+            TRY_INC_GAME_STAT(2, evosCancelled, USHRT_MAX);
             break;
+        case DB_SWEET_SCENTS:
+			TRY_INC_GAME_STAT(2, sweetScents, USHRT_MAX);
+			break;
     }
 }
 
@@ -584,14 +590,17 @@ u32 GetDoneButtonStat(enum DoneButtonStat stat)
             GET_GAME_STAT(2, pokemonCaughtInBalls, USHRT_MAX);
             break;
         case DB_EVOLUTIONS_ATTEMPTED:
-            GET_GAME_STAT(2, evosAttempted, UINT_MAX);
+            GET_GAME_STAT(2, evosAttempted, USHRT_MAX);
             break;
         case DB_EVOLUTIONS_COMPLETED:
-            GET_GAME_STAT(2, evosCompleted, UINT_MAX);
+            GET_GAME_STAT(2, evosCompleted, USHRT_MAX);
             break;
         case DB_EVOLUTIONS_CANCELLED:
-            GET_GAME_STAT(2, evosCancelled, UINT_MAX);
+            GET_GAME_STAT(2, evosCancelled, USHRT_MAX);
             break;
+        case DB_SWEET_SCENTS:
+			GET_GAME_STAT(2, sweetScents, USHRT_MAX);
+			break;
     }
 }
 
@@ -649,7 +658,7 @@ const u8 gBattle2PkmnCaptured[] = _("{COLOR GREEN}{SHADOW LIGHT_GREEN}PKMN CAPTU
 
 // PAGE 5
 const u8 gBattle3Header[] = _("{COLOR GREEN}{SHADOW LIGHT_GREEN}PLAYER STATS (BATTLE 3)");
-const u8 gBattle3MovesHitBy[] = _("{COLOR GREEN}{SHADOW LIGHT_GREEN}MOVES HIT BY: ");
+const u8 gBattle3MovesHitBy[] = _("{COLOR GREEN}{SHADOW LIGHT_GREEN}MOVES HIT (BY): ");
 const u8 gBattle3MovesMissed[] = _("{COLOR GREEN}{SHADOW LIGHT_GREEN}MOVES MISSED: ");
 const u8 gBattle3SEMovesUsed[] = _("{COLOR GREEN}{SHADOW LIGHT_GREEN}S.E. MOVES USED: ");
 const u8 gBattle3NVEMovesUsed[] = _("{COLOR GREEN}{SHADOW LIGHT_GREEN}N.V.E. MOVES USED: ");
@@ -663,6 +672,7 @@ const u8 gBattle4DamageTaken[] = _("{COLOR GREEN}{SHADOW LIGHT_GREEN}DAMAGE TAKE
 const u8 gBattle4DamageHealed[] = _("{COLOR GREEN}{SHADOW LIGHT_GREEN}PLAYER DAMAGE HEALED: ");
 const u8 gBattle4EnemyDamageHealed[] = _("{COLOR GREEN}{SHADOW LIGHT_GREEN}ENEMY DAMAGE HEALED: ");
 const u8 gBattle4MovesLearnt[] = _("{COLOR GREEN}{SHADOW LIGHT_GREEN}MOVES LEARNT: ");
+const u8 gMiscSweetScents[] = _("{COLOR GREEN}{SHADOW LIGHT_GREEN}SWEET SCENTS: ");
 
 // PAGE 7
 const u8 gMoneyItemsHeader[] = _("{COLOR GREEN}{SHADOW LIGHT_GREEN}PLAYER STATS (MONEY & ITEMS)");
@@ -856,7 +866,7 @@ const struct DoneButtonLineItem sLineItems[8][7] = {
 		{gBattle4DamageHealed, GetStandardButtonStat, DB_PLAYER_HP_HEALED},
 		{gBattle4EnemyDamageHealed, GetStandardButtonStat, DB_ENEMY_HP_HEALED},
 		{gBattle4MovesLearnt, GetStandardButtonStat, DB_MOVES_LEARNT},
-		{NULL, NULL}
+		{gMiscSweetScents, GetStandardButtonStat, DB_SWEET_SCENTS},
     },
     { // PAGE 7 (TODO)
         {gMoneyItemsHeader, NULL},

@@ -17,6 +17,7 @@
 #include "constants/field_effects.h"
 #include "constants/rgb.h"
 #include "constants/songs.h"
+#include "done_button.h"
 
 static void FieldCallback_SweetScent(void);
 static void StartSweetScentFieldEffect(void);
@@ -55,6 +56,7 @@ static void StartSweetScentFieldEffect(void)
     CpuFastSet(gPlttBufferUnfaded, gPaletteDecompressionBuffer, 0x100);
     CpuFastSet(gPlttBufferFaded, gPlttBufferUnfaded, 0x100);
     BeginNormalPaletteFade(~(1 << (gSprites[GetPlayerAvatarObjectId()].oam.paletteNum + 16)), 4, 0, 8, RGB_RED);
+    TryIncrementButtonStat(DB_SWEET_SCENTS);
     taskId = CreateTask(TrySweetScentEncounter, 0);
     gTasks[taskId].data[0] = 0;
     FieldEffectActiveListRemove(FLDEFF_SWEET_SCENT);
