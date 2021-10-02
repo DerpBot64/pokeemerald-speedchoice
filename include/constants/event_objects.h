@@ -241,13 +241,15 @@
 #define OBJ_EVENT_GFX_LUGIA                      237
 #define OBJ_EVENT_GFX_HOOH                       238
 
-#define NUM_OBJ_EVENT_GFX                        239
+#define OBJ_EVENT_GFX_ITEM_BALL_HIDDEN 			 239
+
+#define NUM_OBJ_EVENT_GFX                        240
 
 
 // These are dynamic object gfx ids.
 // They correspond with the values of the VAR_OBJ_GFX_ID_X vars.
 // More info about them in include/constants/vars.h
-#define OBJ_EVENT_GFX_VARS   (NUM_OBJ_EVENT_GFX + 1)
+#define OBJ_EVENT_GFX_VARS   (240)
 #define OBJ_EVENT_GFX_VAR_0  (OBJ_EVENT_GFX_VARS + 0x0) // 240
 #define OBJ_EVENT_GFX_VAR_1  (OBJ_EVENT_GFX_VARS + 0x1)
 #define OBJ_EVENT_GFX_VAR_2  (OBJ_EVENT_GFX_VARS + 0x2)
@@ -281,5 +283,14 @@
 
 #define OBJ_EVENT_ID_PLAYER 0xFF
 #define OBJ_EVENT_ID_CAMERA 0x7F
+
+#define OBJ_EVENT_ID_SHOWITEMFINDER_1  0xF7
+#define OBJ_EVENT_ID_SHOWITEMFINDER_2  0xF8
+#define OBJ_EVENT_ID_SHOWITEMFINDER_3  0xF9
+#define OBJ_EVENT_ID_SHOWITEMFINDER_4  0xFA
+#define OBJ_EVENT_ID_SHOWITEMFINDER_5  0xFB
+#define OBJ_EVENT_ID_SHOWITEMFINDER_6  0xFC
+#define OBJ_EVENT_ID_SHOWITEMFINDER_7  0xFD
+#define OBJ_EVENT_ID_SHOWITEMFINDER_8  0xFE
 
 #endif  // GUARD_CONSTANTS_EVENT_OBJECTS_H

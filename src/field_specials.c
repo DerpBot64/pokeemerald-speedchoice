@@ -67,6 +67,7 @@
 #include "constants/weather.h"
 #include "constants/metatile_labels.h"
 #include "palette.h"
+#include "speedchoice.h"
 
 EWRAM_DATA bool8 gBikeCyclingChallenge = FALSE;
 EWRAM_DATA u8 gBikeCollisions = 0;
@@ -971,9 +972,50 @@ void CableCarWarp(void)
     }
 }
 
+const u8 ItemFinderShowIDs2[] = {
+	OBJ_EVENT_ID_SHOWITEMFINDER_1,
+	OBJ_EVENT_ID_SHOWITEMFINDER_2,
+	OBJ_EVENT_ID_SHOWITEMFINDER_3,
+	OBJ_EVENT_ID_SHOWITEMFINDER_4,
+	OBJ_EVENT_ID_SHOWITEMFINDER_5,
+	OBJ_EVENT_ID_SHOWITEMFINDER_6,
+	OBJ_EVENT_ID_SHOWITEMFINDER_7,
+	OBJ_EVENT_ID_SHOWITEMFINDER_8
+};
+
 void SetHiddenItemFlag(void)
 {
-    FlagSet(gSpecialVar_0x8004);
+	struct SpriteFrameImage image;
+	u8 objectEventId;
+	u8 i;
+	u8 j;
+
+	FlagSet(gSpecialVar_0x8004);
+
+	if(CheckSpeedchoiceOption(SHOW_HIDDEN_ITEMS,SHOW_HIDDEN_YES)){
+		j = 0;
+		//check if should hide overworld sprite for shown hidden items
+		for (i = 0; i < gMapHeader.events->bgEventCount; i++)
+		{
+			if (gMapHeader.events->bgEvents[i].kind == 7 )
+			{
+				if(gSpecialVar_0x8004 == gMapHeader.events->bgEvents[i].bgUnion.hiddenItem.hiddenItemId + FLAG_HIDDEN_ITEMS_START){
+					if (!TryGetObjectEventIdByLocalIdAndMap(ItemFinderShowIDs2[j], gSaveBlock1Ptr->location.mapNum, gSaveBlock1Ptr->location.mapGroup, &objectEventId))
+					{
+						gObjectEvents[objectEventId].active = FALSE;
+						image.size = GetObjectEventGraphicsInfo(gObjectEvents[objectEventId].graphicsId)->size;
+						gSprites[gObjectEvents[objectEventId].spriteId].images = &image;
+						DestroySprite(&gSprites[gObjectEvents[objectEventId].spriteId]);
+					}
+					break;
+				}
+				j++;
+				if(j > 7){
+					break;
+				}
+			}
+		}
+	}
 }
 
 u16 GetWeekCount(void)

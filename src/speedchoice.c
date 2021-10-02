@@ -173,6 +173,7 @@ const u8 gSpeedchoiceOptionForceDitto[] = _("{COLOR GREEN}{SHADOW LIGHT_GREEN}FO
 // PAGE 5
 const u8 gSpeedchoiceOptionGen7XItems[] = _("{COLOR GREEN}{SHADOW LIGHT_GREEN}GEN 7 X ITEMS");
 const u8 gSpeedchoiceOptionEvoEveryLv[] = _("{COLOR GREEN}{SHADOW LIGHT_GREEN}EVO EVERY LV");
+const u8 gSpeedchoiceOptionShowHiddenItems[] = _("{COLOR GREEN}{SHADOW LIGHT_GREEN}SHOW HIDDEN ITEMS");
 
 // CONSTANT OPTIONS
 const u8 gSpeedchoiceOptionPage[] = _("{COLOR GREEN}{SHADOW LIGHT_GREEN}PAGE");
@@ -216,6 +217,7 @@ const u8 gSpeedchoiceTooltipGen7XItems[] = _("Stat boost +2 instead of +1.");
 const u8 gSpeedchoiceTooltipEvoEveryLv[] = _("{PKMN} evolve into a random\nbut set species every lv.");
 const u8 gSpeedchoiceTooltipMemeFishing[] = _("Old and Good Rod can catch high\nlevel {PKMN}.");
 const u8 gSpeedchoiceTooltipForceDitto[] = _("Wynaut Egg is forced to be a\nDitto egg.");
+const u8 gSpeedchoiceTooltipShowHiddenItems[] = _("Shows hidden items in the overworld.");
 
 // START GAME
 const u8 gSpeedchoiceStartGameText[] = _("CV: {STR_VAR_1}\nStart the game?");
@@ -272,7 +274,8 @@ static const u8 gPresetVanilla[CURRENT_OPTIONS_NUM] = {
 	FAST_EGG_BREED_NO,      // FAST_EGG_BREEED
 	MEME_FISH_NO,           // MEME_FISH
     EVO_EV_OFF,             // EVO_EVERY_LEVEL
-	FORCE_DITTO_NO          // FORCE_DITTO
+	FORCE_DITTO_NO,         // FORCE_DITTO
+	SHOW_HIDDEN_NO          // SHOW_HIDDEN_ITEMS
 };
 
 static const u8 gPresetBingo[CURRENT_OPTIONS_NUM] = {
@@ -293,7 +296,8 @@ static const u8 gPresetBingo[CURRENT_OPTIONS_NUM] = {
 	FAST_EGG_BREED_YES,     // FAST_EGG_BREEED
 	MEME_FISH_YES,          // MEME_FISH
     EVO_EV_OFF,             // EVO_EVERY_LEVEL
-	FORCE_DITTO_YES         // FORCE_DITTO
+	FORCE_DITTO_YES,        // FORCE_DITTO
+	SHOW_HIDDEN_YES         // SHOW_HIDDEN_ITEMS
 };
 
 static const u8 gPresetCEA[CURRENT_OPTIONS_NUM] = {
@@ -314,7 +318,8 @@ static const u8 gPresetCEA[CURRENT_OPTIONS_NUM] = {
 	FAST_EGG_BREED_YES,     // FAST_EGG_BREEED
 	MEME_FISH_YES,          // MEME_FISH
     EVO_EV_OFF,             // EVO_EVERY_LEVEL
-	FORCE_DITTO_NO          // FORCE_DITTO
+	FORCE_DITTO_NO,         // FORCE_DITTO
+	SHOW_HIDDEN_YES         // SHOW_HIDDEN_ITEMS
 };
 
 static const u8 gPresetRace[CURRENT_OPTIONS_NUM] = {
@@ -335,7 +340,8 @@ static const u8 gPresetRace[CURRENT_OPTIONS_NUM] = {
 	FAST_EGG_BREED_NO,      // FAST_EGG_BREEED
 	MEME_FISH_NO,           // MEME_FISH
     EVO_EV_OFF,             // EVO_EVERY_LEVEL
-	FORCE_DITTO_NO          // FORCE_DITTO
+	FORCE_DITTO_NO,         // FORCE_DITTO
+	SHOW_HIDDEN_YES         // SHOW_HIDDEN_ITEMS
 };
 
 static const u8 gPresetMeme[CURRENT_OPTIONS_NUM] = {
@@ -356,7 +362,8 @@ static const u8 gPresetMeme[CURRENT_OPTIONS_NUM] = {
 	FAST_EGG_BREED_NO,      // FAST_EGG_BREEED
 	MEME_FISH_YES,          // MEME_FISH
     EVO_EV_ON,              // EVO_EVERY_LEVEL
-	FORCE_DITTO_YES         // FORCE_DITTO
+	FORCE_DITTO_YES,        // FORCE_DITTO
+	SHOW_HIDDEN_YES         // SHOW_HIDDEN_ITEMS
 };
 
 /*
@@ -701,6 +708,17 @@ const struct SpeedchoiceOption SpeedchoiceOptions[CURRENT_OPTIONS_NUM + 1] = // 
 		/* Option Tooltip */ gSpeedchoiceTooltipForceDitto,
 		/* Option Usable  */ TRUE
 	},
+	// ----------------------------------
+	// Show hidden items OPTION
+	// ----------------------------------
+	{
+		/* Option Count   */ 2,
+		/* Option Type    */ NORMAL,
+		/* Option Preset  */ gSpeedchoiceOptionShowHiddenItems,
+		/* Option Text    */ OptionChoiceConfigOnOff,
+		/* Option Tooltip */ gSpeedchoiceTooltipShowHiddenItems,
+		/* Option Usable  */ TRUE
+	},
     // ----------------------------------
     // PAGE STATIC OPTION
     // ----------------------------------
@@ -778,6 +796,7 @@ void SetOptionChoicesAndConfigFromPreset(const u8 *preset)
     gSaveBlock2Ptr->speedchoiceConfig.memeFish = preset[MEME_FISH];
     gSaveBlock2Ptr->speedchoiceConfig.evoEveryLevel = preset[EVO_EVERY_LEVEL];
     gSaveBlock2Ptr->speedchoiceConfig.forceDitto = preset[FORCE_DITTO];
+    gSaveBlock2Ptr->speedchoiceConfig.showHiddenItems = preset[SHOW_HIDDEN_ITEMS];
 }
 
 /*
@@ -822,6 +841,8 @@ bool8 CheckSpeedchoiceOption(u8 option, u8 selection)
             return gSaveBlock2Ptr->speedchoiceConfig.evoEveryLevel == selection;
         case FORCE_DITTO:
             return gSaveBlock2Ptr->speedchoiceConfig.forceDitto == selection;
+        case SHOW_HIDDEN_ITEMS:
+            return gSaveBlock2Ptr->speedchoiceConfig.showHiddenItems == selection;
         default:
             return FALSE;
     }

@@ -7,7 +7,7 @@
 
 // The current total number of selectable options. Be sure to count preset too and
 // player name.
-#define CURRENT_OPTIONS_NUM 18
+#define CURRENT_OPTIONS_NUM 19
 
 // Maximum number of possible selectable options per option.
 #define MAX_CHOICES 6
@@ -102,6 +102,7 @@ enum
 	MEME_FISH,
     EVO_EVERY_LEVEL,
 	FORCE_DITTO,
+	SHOW_HIDDEN_ITEMS,
 
     // ----------------------
     // STATIC OPTIONS
@@ -343,6 +344,15 @@ enum
 {
 	FORCE_DITTO_YES,
 	FORCE_DITTO_NO
+};
+
+// --------------------
+// SHOW HIDDEN ITEMS ENUM
+// --------------------
+enum
+{
+	SHOW_HIDDEN_YES,
+	SHOW_HIDDEN_NO
 };
 
 // Enumeration for optionType in the Speedchoice struct below.
