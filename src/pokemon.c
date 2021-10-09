@@ -2190,6 +2190,26 @@ void CreateMon(struct Pokemon *mon, u16 species, u8 level, u8 fixedIV, u8 hasFix
     CalculateMonStats(mon);
 }
 
+u16 getShinyAttempts(void){
+	if(CheckSpeedchoiceOption(BOOST_SHINY_RATE, BOOST_SHINY_HIGH)){
+
+		#if DEVMODE
+		{
+			return SHINY_ATTEMPTS_INSANE;
+	    }
+		#endif //DEVMODE
+
+		return SHINY_ATTEMPTS_HIGH;
+	}
+	if(CheckSpeedchoiceOption(BOOST_SHINY_RATE, BOOST_SHINY_MED)){
+		return SHINY_ATTEMPTS_MED;
+	}
+	if(CheckSpeedchoiceOption(BOOST_SHINY_RATE, BOOST_SHINY_LOW)){
+		return SHINY_ATTEMPTS_LOW;
+	}
+	return SHINY_ATTEMPTS_DEFAULT;
+}
+
 void CreateBoxMon(struct BoxPokemon *boxMon, u16 species, u8 level, u8 fixedIV, u8 hasFixedPersonality, u32 fixedPersonality, u8 otIdType, u32 fixedOtId)
 {
     u8 speciesName[POKEMON_NAME_LENGTH + 1];
@@ -2201,8 +2221,29 @@ void CreateBoxMon(struct BoxPokemon *boxMon, u16 species, u8 level, u8 fixedIV, 
 
     if (hasFixedPersonality)
         personality = fixedPersonality;
-    else
-        personality = Random32();
+    else{
+    	if(otIdType == OT_ID_PRESET){
+    		value=fixedOtId;
+    	}
+    	else{
+			value = gSaveBlock2Ptr->playerTrainerId[0]
+						  | (gSaveBlock2Ptr->playerTrainerId[1] << 8)
+						  | (gSaveBlock2Ptr->playerTrainerId[2] << 16)
+						  | (gSaveBlock2Ptr->playerTrainerId[3] << 24);
+    	}
+
+    	if (otIdType == OT_ID_RANDOM_NO_SHINY){
+			checksum = 1;
+    	}
+    	else{
+    		checksum = getShinyAttempts();
+    	}
+
+        do
+        {
+        	personality = Random32();
+    	}while(!(1 > checksum-- || IsShinyOtIdPersonality(value,personality)));
+    }
 
     SetBoxMonData(boxMon, MON_DATA_PERSONALITY, &personality);
 
@@ -2291,12 +2332,24 @@ void CreateBoxMon(struct BoxPokemon *boxMon, u16 species, u8 level, u8 fixedIV, 
 void CreateMonWithNature(struct Pokemon *mon, u16 species, u8 level, u8 fixedIV, u8 nature)
 {
     u32 personality;
+    u16 counter;
+    u32 value;
+
+    counter = getShinyAttempts();
+    value = gSaveBlock2Ptr->playerTrainerId[0]
+        	              | (gSaveBlock2Ptr->playerTrainerId[1] << 8)
+        	              | (gSaveBlock2Ptr->playerTrainerId[2] << 16)
+        	              | (gSaveBlock2Ptr->playerTrainerId[3] << 24);
 
     do
     {
-        personality = Random32();
-    }
-    while (nature != GetNatureFromPersonality(personality));
+
+    	do
+		{
+			personality = Random32();
+		}
+		while (nature != GetNatureFromPersonality(personality));
+    }while(!(1 > counter-- || IsShinyOtIdPersonality(value,personality)));
 
     CreateMon(mon, species, level, fixedIV, 1, personality, OT_ID_PLAYER_ID, 0);
 }
@@ -2304,28 +2357,41 @@ void CreateMonWithNature(struct Pokemon *mon, u16 species, u8 level, u8 fixedIV,
 void CreateMonWithGenderNatureLetter(struct Pokemon *mon, u16 species, u8 level, u8 fixedIV, u8 gender, u8 nature, u8 unownLetter)
 {
     u32 personality;
+    u16 counter;
+    u32 value;
+
+    counter = getShinyAttempts();
+    value = gSaveBlock2Ptr->playerTrainerId[0]
+    					  | (gSaveBlock2Ptr->playerTrainerId[1] << 8)
+    					  | (gSaveBlock2Ptr->playerTrainerId[2] << 16)
+    					  | (gSaveBlock2Ptr->playerTrainerId[3] << 24);
 
     if ((u8)(unownLetter - 1) < 28)
     {
         u16 actualLetter;
-
         do
         {
-            personality = Random32();
-            actualLetter = ((((personality & 0x3000000) >> 18) | ((personality & 0x30000) >> 12) | ((personality & 0x300) >> 6) | (personality & 0x3)) % 28);
-        }
-        while (nature != GetNatureFromPersonality(personality)
-            || gender != GetGenderFromSpeciesAndPersonality(species, personality)
-            || actualLetter != unownLetter - 1);
+			do
+			{
+				personality = Random32();
+				actualLetter = ((((personality & 0x3000000) >> 18) | ((personality & 0x30000) >> 12) | ((personality & 0x300) >> 6) | (personality & 0x3)) % 28);
+			}
+			while (nature != GetNatureFromPersonality(personality)
+				|| gender != GetGenderFromSpeciesAndPersonality(species, personality)
+				|| actualLetter != unownLetter - 1);
+        }while(!(1 > counter-- || IsShinyOtIdPersonality(value,personality)));
     }
     else
     {
-        do
-        {
-            personality = Random32();
-        }
-        while (nature != GetNatureFromPersonality(personality)
-            || gender != GetGenderFromSpeciesAndPersonality(species, personality));
+    	do
+    	{
+			do
+			{
+				personality = Random32();
+			}
+			while (nature != GetNatureFromPersonality(personality)
+				|| gender != GetGenderFromSpeciesAndPersonality(species, personality));
+    	}while(!(1 > counter-- || IsShinyOtIdPersonality(value,personality)));
     }
 
     CreateMon(mon, species, level, fixedIV, 1, personality, OT_ID_PLAYER_ID, 0);
@@ -2336,13 +2402,19 @@ void CreateMaleMon(struct Pokemon *mon, u16 species, u8 level)
 {
     u32 personality;
     u32 otId;
+    u16 counter;
 
+    counter = getShinyAttempts();
     do
     {
-        otId = Random32();
-        personality = Random32();
-    }
-    while (GetGenderFromSpeciesAndPersonality(species, personality) != MON_MALE);
+		do
+		{
+			otId = Random32();
+			personality = Random32();
+		}
+		while (GetGenderFromSpeciesAndPersonality(species, personality) != MON_MALE);
+    }while(!(1 > counter-- || IsShinyOtIdPersonality(otId,personality)));
+
     CreateMon(mon, species, level, USE_RANDOM_IVS, 1, personality, OT_ID_PRESET, otId);
 }
 

@@ -38,3 +38,4 @@ porymap.project.cfg
 .project
 *.ips
 *.lnk
+.cproject

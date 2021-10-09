@@ -134,6 +134,10 @@ const u8 gSpeedchoiceTextNone[]   = _("{COLOR GREEN}{SHADOW LIGHT_GREEN}NONE");
 const u8 gSpeedchoiceTextTutor[] = _("{COLOR GREEN}{SHADOW LIGHT_GREEN}TUTOR");
 const u8 gSpeedchoiceTextHM05[]   = _("{COLOR GREEN}{SHADOW LIGHT_GREEN}HM05");
 
+const u8 gSpeedchoiceTextHigh[]   = _("{COLOR GREEN}{SHADOW LIGHT_GREEN}HIGH");
+const u8 gSpeedchoiceTextMed[]   = _("{COLOR GREEN}{SHADOW LIGHT_GREEN}MED");
+const u8 gSpeedchoiceTextLow[]   = _("{COLOR GREEN}{SHADOW LIGHT_GREEN}LOW");
+
 /* ----------------------------------------------- */
 /* SPEEDCHOICE MENU TEXT (Option Names)            */
 /* ----------------------------------------------- */
@@ -174,6 +178,7 @@ const u8 gSpeedchoiceOptionForceDitto[] = _("{COLOR GREEN}{SHADOW LIGHT_GREEN}FO
 const u8 gSpeedchoiceOptionGen7XItems[] = _("{COLOR GREEN}{SHADOW LIGHT_GREEN}GEN 7 X ITEMS");
 const u8 gSpeedchoiceOptionEvoEveryLv[] = _("{COLOR GREEN}{SHADOW LIGHT_GREEN}EVO EVERY LV");
 const u8 gSpeedchoiceOptionShowHiddenItems[] = _("{COLOR GREEN}{SHADOW LIGHT_GREEN}SHOW HIDDEN ITEMS");
+const u8 gSpeedchoiceOptionBoostShinyRate[] = _("{COLOR GREEN}{SHADOW LIGHT_GREEN}MORE SHINIES");
 
 // CONSTANT OPTIONS
 const u8 gSpeedchoiceOptionPage[] = _("{COLOR GREEN}{SHADOW LIGHT_GREEN}PAGE");
@@ -218,6 +223,7 @@ const u8 gSpeedchoiceTooltipEvoEveryLv[] = _("{PKMN} evolve into a random\nbut s
 const u8 gSpeedchoiceTooltipMemeFishing[] = _("Old and Good Rod can catch high\nlevel {PKMN}.");
 const u8 gSpeedchoiceTooltipForceDitto[] = _("Wynaut Egg is forced to be a\nDitto egg.");
 const u8 gSpeedchoiceTooltipShowHiddenItems[] = _("Shows hidden items in the overworld.");
+const u8 gSpeedchoiceTooltipBoostShinyRate[] = _("Adds more RNG calls to boost shiny rate.\nShiny animation is sped up in any case.\pOff: 1 roll, 1/8192\nLow: 2 rolls, about 1/4096\pMed: 8 rolls, about 1/1024\nHigh: 32 rolls, about 1/256");
 
 // START GAME
 const u8 gSpeedchoiceStartGameText[] = _("CV: {STR_VAR_1}\nStart the game?");
@@ -275,7 +281,8 @@ static const u8 gPresetVanilla[CURRENT_OPTIONS_NUM] = {
 	MEME_FISH_NO,           // MEME_FISH
     EVO_EV_OFF,             // EVO_EVERY_LEVEL
 	FORCE_DITTO_NO,         // FORCE_DITTO
-	SHOW_HIDDEN_NO          // SHOW_HIDDEN_ITEMS
+	SHOW_HIDDEN_NO,         // SHOW_HIDDEN_ITEMS
+	BOOST_SHINY_OFF			// BOOST_SHINY_RATE
 };
 
 static const u8 gPresetBingo[CURRENT_OPTIONS_NUM] = {
@@ -297,7 +304,8 @@ static const u8 gPresetBingo[CURRENT_OPTIONS_NUM] = {
 	MEME_FISH_YES,          // MEME_FISH
     EVO_EV_OFF,             // EVO_EVERY_LEVEL
 	FORCE_DITTO_YES,        // FORCE_DITTO
-	SHOW_HIDDEN_YES         // SHOW_HIDDEN_ITEMS
+	SHOW_HIDDEN_YES,        // SHOW_HIDDEN_ITEMS
+	BOOST_SHINY_MED			// BOOST_SHINY_RATE
 };
 
 static const u8 gPresetCEA[CURRENT_OPTIONS_NUM] = {
@@ -319,7 +327,8 @@ static const u8 gPresetCEA[CURRENT_OPTIONS_NUM] = {
 	MEME_FISH_YES,          // MEME_FISH
     EVO_EV_OFF,             // EVO_EVERY_LEVEL
 	FORCE_DITTO_NO,         // FORCE_DITTO
-	SHOW_HIDDEN_YES         // SHOW_HIDDEN_ITEMS
+	SHOW_HIDDEN_YES,        // SHOW_HIDDEN_ITEMS
+	BOOST_SHINY_LOW			// BOOST_SHINY_RATE
 };
 
 static const u8 gPresetRace[CURRENT_OPTIONS_NUM] = {
@@ -341,7 +350,8 @@ static const u8 gPresetRace[CURRENT_OPTIONS_NUM] = {
 	MEME_FISH_NO,           // MEME_FISH
     EVO_EV_OFF,             // EVO_EVERY_LEVEL
 	FORCE_DITTO_NO,         // FORCE_DITTO
-	SHOW_HIDDEN_YES         // SHOW_HIDDEN_ITEMS
+	SHOW_HIDDEN_YES,        // SHOW_HIDDEN_ITEMS
+	BOOST_SHINY_MED			// BOOST_SHINY_RATE
 };
 
 static const u8 gPresetMeme[CURRENT_OPTIONS_NUM] = {
@@ -363,7 +373,8 @@ static const u8 gPresetMeme[CURRENT_OPTIONS_NUM] = {
 	MEME_FISH_YES,          // MEME_FISH
     EVO_EV_ON,              // EVO_EVERY_LEVEL
 	FORCE_DITTO_YES,        // FORCE_DITTO
-	SHOW_HIDDEN_YES         // SHOW_HIDDEN_ITEMS
+	SHOW_HIDDEN_YES,        // SHOW_HIDDEN_ITEMS
+	BOOST_SHINY_HIGH		// BOOST_SHINY_RATE
 };
 
 /*
@@ -464,6 +475,16 @@ const struct OptionChoiceConfig OptionChoiceConfigKeepNone[MAX_CHOICES] =
     { 150, (u8 *)&gSpeedchoiceTextBW   },
     { 180, (u8 *)&gSpeedchoiceTextNone },
     { -1, NULL },
+    { -1, NULL },
+    { -1, NULL }
+};
+
+const struct OptionChoiceConfig OptionChoiceConfigHighMedLowOff[MAX_CHOICES] =
+{
+    { 85, (u8 *)&gSpeedchoiceTextHigh },
+    { 120, (u8 *)&gSpeedchoiceTextMed },
+    { 150, (u8 *)&gSpeedchoiceTextLow },
+    { 180, (u8 *)&gSpeedchoiceTextOff },
     { -1, NULL },
     { -1, NULL }
 };
@@ -719,6 +740,17 @@ const struct SpeedchoiceOption SpeedchoiceOptions[CURRENT_OPTIONS_NUM + 1] = // 
 		/* Option Tooltip */ gSpeedchoiceTooltipShowHiddenItems,
 		/* Option Usable  */ TRUE
 	},
+	// ----------------------------------
+	// Boost Shiny Rate OPTION
+	// ----------------------------------
+	{
+		/* Option Count   */ 4,
+		/* Option Type    */ NORMAL,
+		/* Option Preset  */ gSpeedchoiceOptionBoostShinyRate,
+		/* Option Text    */ OptionChoiceConfigHighMedLowOff,
+		/* Option Tooltip */ gSpeedchoiceTooltipBoostShinyRate,
+		/* Option Usable  */ TRUE
+	},
     // ----------------------------------
     // PAGE STATIC OPTION
     // ----------------------------------
@@ -797,6 +829,7 @@ void SetOptionChoicesAndConfigFromPreset(const u8 *preset)
     gSaveBlock2Ptr->speedchoiceConfig.evoEveryLevel = preset[EVO_EVERY_LEVEL];
     gSaveBlock2Ptr->speedchoiceConfig.forceDitto = preset[FORCE_DITTO];
     gSaveBlock2Ptr->speedchoiceConfig.showHiddenItems = preset[SHOW_HIDDEN_ITEMS];
+    gSaveBlock2Ptr->speedchoiceConfig.boostShinyRate = preset[BOOST_SHINY_RATE];
 }
 
 /*
@@ -843,6 +876,8 @@ bool8 CheckSpeedchoiceOption(u8 option, u8 selection)
             return gSaveBlock2Ptr->speedchoiceConfig.forceDitto == selection;
         case SHOW_HIDDEN_ITEMS:
             return gSaveBlock2Ptr->speedchoiceConfig.showHiddenItems == selection;
+        case BOOST_SHINY_RATE:
+            return gSaveBlock2Ptr->speedchoiceConfig.boostShinyRate == selection;
         default:
             return FALSE;
     }

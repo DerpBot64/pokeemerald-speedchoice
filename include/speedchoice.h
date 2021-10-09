@@ -7,7 +7,7 @@
 
 // The current total number of selectable options. Be sure to count preset too and
 // player name.
-#define CURRENT_OPTIONS_NUM 19
+#define CURRENT_OPTIONS_NUM 20
 
 // Maximum number of possible selectable options per option.
 #define MAX_CHOICES 6
@@ -103,6 +103,7 @@ enum
     EVO_EVERY_LEVEL,
 	FORCE_DITTO,
 	SHOW_HIDDEN_ITEMS,
+	BOOST_SHINY_RATE,
 
     // ----------------------
     // STATIC OPTIONS
@@ -353,6 +354,17 @@ enum
 {
 	SHOW_HIDDEN_YES,
 	SHOW_HIDDEN_NO
+};
+
+// --------------------
+// BOOST SHINY RATE ENUM
+// --------------------
+enum
+{
+	BOOST_SHINY_HIGH,
+	BOOST_SHINY_MED,
+	BOOST_SHINY_LOW,
+	BOOST_SHINY_OFF
 };
 
 // Enumeration for optionType in the Speedchoice struct below.

@@ -249,9 +249,6 @@ static void sub_8064520(void)
 
             gBattleSpritesDataPtr->healthBoxesData[BATTLE_PARTNER(gActiveBattler)].triedShinyMonAnim = FALSE;
             gBattleSpritesDataPtr->healthBoxesData[BATTLE_PARTNER(gActiveBattler)].finishedShinyMonAnim = FALSE;
-
-            FreeSpriteTilesByTag(0x27F9);
-            FreeSpritePaletteByTag(0x27F9);
         }
         else
         {
@@ -260,12 +257,6 @@ static void sub_8064520(void)
 
             gBattleSpritesDataPtr->healthBoxesData[gActiveBattler].triedShinyMonAnim = FALSE;
             gBattleSpritesDataPtr->healthBoxesData[gActiveBattler].finishedShinyMonAnim = FALSE;
-
-            if (GetBattlerPosition(gActiveBattler) == B_POSITION_OPPONENT_RIGHT)
-            {
-                FreeSpriteTilesByTag(0x27F9);
-                FreeSpritePaletteByTag(0x27F9);
-            }
         }
 
         gBattleSpritesDataPtr->healthBoxesData[gActiveBattler].field_9 = 3;
@@ -377,8 +368,6 @@ static void sub_8064B04(void)
             {
                 gBattleSpritesDataPtr->healthBoxesData[gActiveBattler].triedShinyMonAnim = FALSE;
                 gBattleSpritesDataPtr->healthBoxesData[gActiveBattler].finishedShinyMonAnim = FALSE;
-                FreeSpriteTilesByTag(0x27F9);
-                FreeSpritePaletteByTag(0x27F9);
                 LinkOpponentBufferExecCompleted();
             }
         }
@@ -478,9 +467,6 @@ static void sub_8064E50(void)
     {
         gBattleSpritesDataPtr->healthBoxesData[gActiveBattler].triedShinyMonAnim = FALSE;
         gBattleSpritesDataPtr->healthBoxesData[gActiveBattler].finishedShinyMonAnim = FALSE;
-
-        FreeSpriteTilesByTag(0x27F9);
-        FreeSpritePaletteByTag(0x27F9);
 
         StartSpriteAnim(&gSprites[gBattlerSpriteIds[gActiveBattler]], 0);
 
