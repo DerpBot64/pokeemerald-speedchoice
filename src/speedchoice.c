@@ -1557,7 +1557,7 @@ static void Task_SpeedchoiceMenuProcessInput(u8 taskId)
 {
 	if(!gAlreadyLoaded)
 	{
-		DrawTooltip(taskId, gSpeedchoiceTooltipExplanation, GetPlayerTextSpeed(), FALSE);
+		DrawTooltip(taskId, gSpeedchoiceTooltipExplanation, OPTIONS_TEXT_SPEED_FAST, FALSE);
 		gAlreadyLoaded = TRUE;
 	}
     else if (gMain.newKeys & A_BUTTON)
@@ -1578,7 +1578,7 @@ static void Task_SpeedchoiceMenuProcessInput(u8 taskId)
     else if (gMain.newKeys & SELECT_BUTTON) // do tooltip.
     {
         if(gLocalSpeedchoiceConfig.trueIndex <= CURRENT_OPTIONS_NUM && SpeedchoiceOptions[gLocalSpeedchoiceConfig.trueIndex].tooltip != NULL)
-            DrawTooltip(taskId, SpeedchoiceOptions[gLocalSpeedchoiceConfig.trueIndex].tooltip, GetPlayerTextSpeed(), FALSE);
+            DrawTooltip(taskId, SpeedchoiceOptions[gLocalSpeedchoiceConfig.trueIndex].tooltip, OPTIONS_TEXT_SPEED_FAST, FALSE);
     }
     else if (gMain.newKeys & DPAD_UP)
     {
