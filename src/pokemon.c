@@ -2335,6 +2335,12 @@ void CreateMonWithNature(struct Pokemon *mon, u16 species, u8 level, u8 fixedIV,
     u16 counter;
     u32 value;
 
+    //handle random nature override
+    if(nature >= NUM_NATURES){
+    	CreateMon(mon, species, level, fixedIV, 0, 0, OT_ID_PLAYER_ID, 0);
+    	return;
+    }
+
     counter = getShinyAttempts();
     value = gSaveBlock2Ptr->playerTrainerId[0]
         	              | (gSaveBlock2Ptr->playerTrainerId[1] << 8)
@@ -2354,11 +2360,58 @@ void CreateMonWithNature(struct Pokemon *mon, u16 species, u8 level, u8 fixedIV,
     CreateMon(mon, species, level, fixedIV, 1, personality, OT_ID_PLAYER_ID, 0);
 }
 
+void CreateMonWithGenderLetter(struct Pokemon *mon, u16 species, u8 level, u8 fixedIV, u8 gender, u8 unownLetter)
+{
+    u32 personality;
+    u16 counter;
+    u32 value;
+
+    counter = getShinyAttempts();
+    value = gSaveBlock2Ptr->playerTrainerId[0]
+    					  | (gSaveBlock2Ptr->playerTrainerId[1] << 8)
+    					  | (gSaveBlock2Ptr->playerTrainerId[2] << 16)
+    					  | (gSaveBlock2Ptr->playerTrainerId[3] << 24);
+
+    if ((u8)(unownLetter - 1) < 28)
+    {
+        u16 actualLetter;
+        do
+        {
+			do
+			{
+				personality = Random32();
+				actualLetter = ((((personality & 0x3000000) >> 18) | ((personality & 0x30000) >> 12) | ((personality & 0x300) >> 6) | (personality & 0x3)) % 28);
+			}
+			while (gender != GetGenderFromSpeciesAndPersonality(species, personality)
+				|| actualLetter != unownLetter - 1);
+        }while(!(1 > counter-- || IsShinyOtIdPersonality(value,personality)));
+    }
+    else
+    {
+    	do
+    	{
+			do
+			{
+				personality = Random32();
+			}
+			while (gender != GetGenderFromSpeciesAndPersonality(species, personality));
+    	}while(!(1 > counter-- || IsShinyOtIdPersonality(value,personality)));
+    }
+
+    CreateMon(mon, species, level, fixedIV, 1, personality, OT_ID_PLAYER_ID, 0);
+}
+
 void CreateMonWithGenderNatureLetter(struct Pokemon *mon, u16 species, u8 level, u8 fixedIV, u8 gender, u8 nature, u8 unownLetter)
 {
     u32 personality;
     u16 counter;
     u32 value;
+
+    //handle random nature override
+	if(nature >= NUM_NATURES){
+		CreateMonWithGenderLetter(mon, species, level, fixedIV, gender, unownLetter);
+		return;
+	}
 
     counter = getShinyAttempts();
     value = gSaveBlock2Ptr->playerTrainerId[0]

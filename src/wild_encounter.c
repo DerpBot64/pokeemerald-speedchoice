@@ -460,7 +460,7 @@ static u8 PickWildMonNature(void)
     }
 
     // random nature
-    return Random() % NUM_NATURES;
+    return NUM_NATURES;
 }
 
 static void CreateWildMon(u16 species, u8 level)
